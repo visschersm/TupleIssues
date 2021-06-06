@@ -4,7 +4,7 @@ using FluentAssertions;
 using Moq;
 using Autofac.Core;
 
-namespace MPTest.TestUtilities.UnitTests
+namespace MPTech.TestUtilities.UnitTests
 {
     [TestClass]
     public class GenericFactoryTests

@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TestUtilities.Mongo.UnitTests
+namespace MPTech.TestUtilities.Mongo.UnitTests
 {
     [TestClass]
     public class UnitTest1
