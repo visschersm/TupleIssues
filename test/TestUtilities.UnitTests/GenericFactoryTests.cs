@@ -55,6 +55,33 @@ namespace MPTech.TestUtilities.UnitTests
         }
 
         [TestMethod]
+        public void CreateTwice_WithoutDependencies_DoesNotThrow()
+        {
+            GenericFactory factory = new GenericFactory();
+
+            Func<TestServiceWithoutDependencies> func1 = () => factory.Create<TestServiceWithoutDependencies>();
+            Func<TestServiceWithoutDependencies> func2 = () => factory.Create<TestServiceWithoutDependencies>();
+
+            func1.Should().NotThrow();
+            func2.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void CreateTwice_WithDependencies_DoesNotThrow()
+        {
+            GenericFactory factory = new GenericFactory();
+
+            Mock<ITestDependencyInterface> mock = new Mock<ITestDependencyInterface>();
+            factory.RegisterOrReplaceService(mock.Object);
+
+            Func<TestServiceWithDependencies> func1 = () => factory.Create<TestServiceWithDependencies>();
+            Func<TestServiceWithDependencies> func2 = () => factory.Create<TestServiceWithDependencies>();
+
+            func1.Should().NotThrow();
+            func2.Should().NotThrow();
+        }
+
+        [TestMethod]
         public void RegisterOrReplaceService_ServiceNull_ArgumentNullException()
         {
             // Arrange

@@ -41,10 +41,7 @@ namespace MPTech.TestUtilities
         public virtual void RegisterOrReplaceService<TService>(TService service)
             where TService : class
         {
-            if (service == null)
-            {
-                throw new ArgumentNullException(nameof(service));
-            }
+            _ = service ?? throw new ArgumentNullException(nameof(service));
 
             this.containerBuilder.RegisterInstance(service);
         }
