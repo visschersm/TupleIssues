@@ -6,7 +6,7 @@ namespace MPTech.TestUtilities
 {
     public class GenericFactory
     {
-        protected ContainerBuilder containerBuilder = new ContainerBuilder();
+        private ContainerBuilder containerBuilder = new ContainerBuilder();
         private IContainer? container = null;
 
         public GenericFactory()
@@ -21,13 +21,17 @@ namespace MPTech.TestUtilities
         public virtual T Create<T>()
             where T : class
         {
-            this.containerBuilder.RegisterType<T>()
+            containerBuilder.RegisterType<T>()
                 .PropertiesAutowired();
 
-            if (this.container != null)
-                throw new Exception();
-
-            this.container = this.containerBuilder.Build();
+            if (container == null)
+            {
+                container = containerBuilder.Build();
+            }
+            else
+            {
+                container = RebuildContainer<T>(this.container);
+            }
 
             return this.container.Resolve<T>();
         }
@@ -43,7 +47,7 @@ namespace MPTech.TestUtilities
         {
             _ = service ?? throw new ArgumentNullException(nameof(service));
 
-            this.containerBuilder.RegisterInstance(service);
+            containerBuilder.RegisterInstance(service);
         }
 
         /// <summary>
@@ -51,7 +55,7 @@ namespace MPTech.TestUtilities
         /// </summary>
         public virtual void EmptyDependencies()
         {
-            this.containerBuilder = new ContainerBuilder();
+            containerBuilder = new ContainerBuilder();
         }
 
         /// <summary>
@@ -60,18 +64,17 @@ namespace MPTech.TestUtilities
         /// <typeparam name="TService"></typeparam>
         public virtual void RemoveService<TService>()
         {
-            if (this.container == null)
-                this.container = this.containerBuilder.Build();
+            if (container == null)
+                container = containerBuilder.Build();
 
-            var components = this.container.ComponentRegistry.Registrations
+            var components = container.ComponentRegistry.Registrations
                 .Where(x => x.Activator.LimitType != typeof(TService))
                 .Select(x => x.GetType());
 
-            this.container = null;
+            container = null;
 
-            this.containerBuilder = new ContainerBuilder();
-
-            this.containerBuilder.RegisterTypes(components.ToArray());
+            containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterTypes(components.ToArray());
         }
 
         /// <summary>
@@ -79,13 +82,27 @@ namespace MPTech.TestUtilities
         /// </summary>
         /// <typeparam name="TService"></typeparam>
         /// <returns></returns>
-        public virtual bool IsRegistered<TService>()
-            where TService : class
+        public virtual bool IsRegistered<T>()
+            where T : class
         {
-            if (this.container == null)
-                this.container = this.containerBuilder.Build();
+            if (container == null)
+                container = containerBuilder.Build();
 
-            return this.container.IsRegistered<TService>();
+            return container.IsRegistered<T>();
+        }
+
+        public IContainer RebuildContainer<T>(IContainer container)
+            where T : class
+        {
+            var components = container.ComponentRegistry.Registrations
+                .Select(x => x.GetType());
+
+            containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<T>()
+                .PropertiesAutowired();
+            containerBuilder.RegisterTypes(components.ToArray());
+
+            return containerBuilder.Build();
         }
     }
 }

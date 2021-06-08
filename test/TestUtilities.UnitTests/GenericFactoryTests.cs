@@ -59,11 +59,11 @@ namespace MPTech.TestUtilities.UnitTests
         {
             GenericFactory factory = new GenericFactory();
 
-            Func<TestServiceWithoutDependencies> func1 = () => factory.Create<TestServiceWithoutDependencies>();
-            Func<TestServiceWithoutDependencies> func2 = () => factory.Create<TestServiceWithoutDependencies>();
+            var result1 = factory.Create<TestServiceWithoutDependencies>();
+            var result2 = factory.Create<TestServiceWithoutDependencies>();
 
-            func1.Should().NotThrow();
-            func2.Should().NotThrow();
+            result1.Should().BeOfType<TestServiceWithoutDependencies>();
+            result2.Should().BeOfType<TestServiceWithoutDependencies>();
         }
 
         [TestMethod]
