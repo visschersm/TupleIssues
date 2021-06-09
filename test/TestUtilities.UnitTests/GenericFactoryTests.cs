@@ -225,11 +225,12 @@ namespace MPTech.TestUtilities.UnitTests
             Mock<IOtherDependencyInterface> otherDependency = new Mock<IOtherDependencyInterface>();
 
             GenericFactory factory = new GenericFactory();
-            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService< ITestDependencyInterface>(dependency.Object);
+            var foo = factory.IsRegistered<ITestDependencyInterface>();
             factory.RegisterOrReplaceService(otherDependency.Object);
 
-            factory.Create<TestServiceWithDependencies>();
-            factory.Create<TestServiceWithOtherDependencies>();
+            _ = factory.Create<TestServiceWithDependencies>();
+            _ = factory.Create<TestServiceWithOtherDependencies>();
 
             Func<TestServiceWithDependencies> func = () =>
             {
@@ -237,11 +238,9 @@ namespace MPTech.TestUtilities.UnitTests
                 return factory.Create<TestServiceWithDependencies>();
             };
 
-            Func<TestServiceWithOtherDependencies> otherFunc = () => factory.Create<TestServiceWithOtherDependencies>();
-            
             // Act & Assert
-            func.Should().Throw<NotImplementedException>();
-            otherFunc.Should().NotThrow();
+            func.Should().Throw<DependencyResolutionException>();
+            _ = factory.Create<TestServiceWithOtherDependencies>();
         }
 
         [TestMethod]
