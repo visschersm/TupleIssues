@@ -1,6 +1,10 @@
 using Autofac;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Decorators;
+using Autofac.Core;
+using Autofac.Builder;
 
 namespace MPTech.TestUtilities
 {
@@ -95,12 +99,18 @@ namespace MPTech.TestUtilities
             where T : class
         {
             var components = container.ComponentRegistry.Registrations
-                .Select(x => x.GetType());
+                //.Where(x => x.Activator.LimitType != typeof(ILifetimeScope))
+                .SelectMany(x => x.Services)
+                .Where(x => (x as TypedService).ServiceType != typeof(ILifetimeScope))
+                .Where(x => (x as TypedService).ServiceType != typeof(IComponentContext))
+                .ToArray();
 
             containerBuilder = new ContainerBuilder();
+            components.Where(x => !(x as TypedService).ServiceType.IsInterface).ToList().ForEach(x => containerBuilder.RegisterInstance(x));
+            components.Where(x => (x as TypedService).ServiceType.IsInterface).ToList().ForEach(x => containerBuilder.RegisterInstance(x).As((x as TypedService).ServiceType));
+
             containerBuilder.RegisterType<T>()
                 .PropertiesAutowired();
-            containerBuilder.RegisterTypes(components.ToArray());
 
             return containerBuilder.Build();
         }

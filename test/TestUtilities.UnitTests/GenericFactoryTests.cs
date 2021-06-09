@@ -74,11 +74,11 @@ namespace MPTech.TestUtilities.UnitTests
             Mock<ITestDependencyInterface> mock = new Mock<ITestDependencyInterface>();
             factory.RegisterOrReplaceService(mock.Object);
 
-            Func<TestServiceWithDependencies> func1 = () => factory.Create<TestServiceWithDependencies>();
-            Func<TestServiceWithDependencies> func2 = () => factory.Create<TestServiceWithDependencies>();
+            var result1 = factory.Create<TestServiceWithDependencies>();
+            var result2 = factory.Create<TestServiceWithDependencies>();
 
-            func1.Should().NotThrow();
-            func2.Should().NotThrow();
+            result1.Should().BeOfType<TestServiceWithDependencies>();
+            result2.Should().BeOfType<TestServiceWithDependencies>();
         }
 
         [TestMethod]
@@ -218,6 +218,33 @@ namespace MPTech.TestUtilities.UnitTests
         }
 
         [TestMethod]
+        public void CreateAfterRemove_MissingDependency_ShouldThrow()
+        {
+            // Arrange
+            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+            Mock<IOtherDependencyInterface> otherDependency = new Mock<IOtherDependencyInterface>();
+
+            GenericFactory factory = new GenericFactory();
+            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService(otherDependency.Object);
+
+            factory.Create<TestServiceWithDependencies>();
+            factory.Create<TestServiceWithOtherDependencies>();
+
+            Func<TestServiceWithDependencies> func = () =>
+            {
+                factory.RemoveService<ITestDependencyInterface>();
+                return factory.Create<TestServiceWithDependencies>();
+            };
+
+            Func<TestServiceWithOtherDependencies> otherFunc = () => factory.Create<TestServiceWithOtherDependencies>();
+            
+            // Act & Assert
+            func.Should().Throw<NotImplementedException>();
+            otherFunc.Should().NotThrow();
+        }
+
+        [TestMethod]
         public void RemoveAfterCreate_ShouldNotThrow()
         {
             // Arrange
@@ -240,9 +267,15 @@ namespace MPTech.TestUtilities.UnitTests
 
     public class TestServiceWithoutDependencies { }
     public interface ITestDependencyInterface { }
+    public interface IOtherDependencyInterface { }
+
     public class TestServiceWithDependencies
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "This is a test dependency, nothing is actually using it, but it is verified by the DI")]
-        public TestServiceWithDependencies(ITestDependencyInterface testDependency) { }
+        public TestServiceWithDependencies(ITestDependencyInterface _) { }
+    }
+
+    public class TestServiceWithOtherDependencies
+    {
+        public TestServiceWithOtherDependencies(IOtherDependencyInterface _) { }
     }
 }
