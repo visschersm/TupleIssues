@@ -97,11 +97,7 @@ namespace MPTech.TestUtilities
                  .Where(x => (x as TypedService) != null)
                  .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
                  .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
-                 .Select(x => new ServiceTuple
-                 {
-                     ServiceType = (x as TypedService)!.ServiceType,
-                     Service = TryResolve(x)
-                 })
+                 .Select(x => new ServiceTuple((x as TypedService)!.ServiceType, TryResolve(x)))
                  .ToArray();
         }
 
@@ -109,7 +105,7 @@ namespace MPTech.TestUtilities
         {
             try
             {
-                return container.Resolve((x as TypedService).ServiceType);
+                return container.Resolve((x as TypedService)!.ServiceType);
             }
             catch (DependencyResolutionException)
             {
@@ -140,6 +136,12 @@ namespace MPTech.TestUtilities
 
         private class ServiceTuple
         {
+            public ServiceTuple(Type serviceType, object? service)
+            {
+                ServiceType = serviceType;
+                Service = service;
+            }
+
             public Type ServiceType { get; set; }
             public object? Service { get; set; }
         }
