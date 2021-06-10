@@ -84,17 +84,7 @@ namespace MPTech.TestUtilities
                 .Where(x => x.ServiceType != typeof(TService))
                 .ToArray();
 
-            var containerBuilder = new ContainerBuilder();
-
-            services.Where(x => x.Service == null)
-                .ToList()
-                .ForEach(x => containerBuilder.RegisterType(x.ServiceType));
-
-            services.Where(x => x.Service != null)
-                .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
-
-            container = containerBuilder.Build();
+            container = CreateContainerBuilder(services).Build();
         }
 
         /// <summary>
@@ -137,7 +127,11 @@ namespace MPTech.TestUtilities
         private ContainerBuilder CreateContainerBuilder(IContainer container)
         {
             var services = GetOwnServices(container);
+            return CreateContainerBuilder(services);
+        }
 
+        private ContainerBuilder CreateContainerBuilder(ServiceTuple[] services)
+        {
             var containerBuilder = new ContainerBuilder();
 
             services.Where(x => x.Service == null)
