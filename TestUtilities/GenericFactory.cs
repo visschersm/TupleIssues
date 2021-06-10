@@ -11,11 +11,12 @@ namespace MPTech.TestUtilities
 {
     public class GenericFactory
     {
-        public ContainerBuilder containerBuilder = new ContainerBuilder();
-        private IContainer? container = null;
+        private IContainer container;
 
         public GenericFactory()
         {
+            var containerBuilder = new ContainerBuilder();
+            container = containerBuilder.Build();
         }
 
         /// <summary>
@@ -26,19 +27,14 @@ namespace MPTech.TestUtilities
         public virtual T Create<T>()
             where T : class
         {
+            RemoveService<T>();
+            var containerBuilder = CreateContainerBuilder(container);
+
             containerBuilder.RegisterType<T>()
                 .PropertiesAutowired();
 
-            if (container == null)
-            {
-                container = containerBuilder.Build();
-            }
-            else
-            {
-                container = RebuildContainer<T>(this.container);
-            }
-
-            return this.container.Resolve<T>();
+            container = containerBuilder.Build();
+            return container.Resolve<T>();
         }
 
         /// <summary>
@@ -52,14 +48,22 @@ namespace MPTech.TestUtilities
         {
             _ = service ?? throw new ArgumentNullException(nameof(service));
 
+            var containerBuilder = CreateContainerBuilder(container);
+            RemoveService<TService>();
+
             if (typeof(TService).IsInterface)
             {
-                containerBuilder.RegisterInstance(service).As<TService>();
+                containerBuilder.RegisterInstance(service)
+                    .As<TService>();
             }
             else
             {
-                containerBuilder.RegisterInstance(service);
+                containerBuilder.RegisterInstance(service)
+                    .As<TService>()
+                    .PropertiesAutowired();
             }
+
+            container = containerBuilder.Build();
         }
 
         /// <summary>
@@ -67,7 +71,7 @@ namespace MPTech.TestUtilities
         /// </summary>
         public virtual void EmptyDependencies()
         {
-            containerBuilder = new ContainerBuilder();
+            container = new ContainerBuilder().Build();
         }
 
         /// <summary>
@@ -76,31 +80,21 @@ namespace MPTech.TestUtilities
         /// <typeparam name="TService"></typeparam>
         public virtual void RemoveService<TService>()
         {
-            if (container == null)
-                container = containerBuilder.Build();
-            else
-                container = RebuildContainer(container);
-
             var services = GetOwnServices(container)
                 .Where(x => x.ServiceType != typeof(TService))
                 .ToArray();
 
-            containerBuilder = new ContainerBuilder();
+            var containerBuilder = new ContainerBuilder();
 
-            services.Where(x => x.ServiceType.IsInterface)
+            services.Where(x => x.Service == null)
                 .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
+                .ForEach(x => containerBuilder.RegisterType(x.ServiceType));
 
-            services.Where(x => !x.ServiceType.IsInterface)
+            services.Where(x => x.Service != null)
                 .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
 
-            foreach (var c in services)
-            {
-                Console.WriteLine(c);
-            }
             container = containerBuilder.Build();
-
         }
 
         /// <summary>
@@ -111,70 +105,56 @@ namespace MPTech.TestUtilities
         public virtual bool IsRegistered<T>()
             where T : class
         {
-            if (container != null)
-                container = RebuildContainer(container);
-            else
-                container = containerBuilder.Build();
-
             return container.IsRegistered<T>();
-        }
-
-        public IContainer RebuildContainer(IContainer container)
-        {
-            var serivces = GetOwnServices(container);
-
-            containerBuilder = new ContainerBuilder();
-
-            serivces.Where(x => x.ServiceType.IsInterface)
-               .ToList()
-               .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
-
-            serivces.Where(x => !x.ServiceType.IsInterface)
-                .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
-
-            return containerBuilder.Build();
-        }
-
-        public IContainer RebuildContainer<T>(IContainer container)
-            where T : class
-        {
-            var services = GetOwnServices(container);
-
-            containerBuilder = new ContainerBuilder();
-
-            services.Where(x => x.ServiceType.IsInterface)
-               .ToList()
-               .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
-
-            services.Where(x => !x.ServiceType.IsInterface)
-                .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
-
-            containerBuilder.RegisterType<T>()
-                .PropertiesAutowired();
-
-            return containerBuilder.Build();
         }
 
         private ServiceTuple[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
-                 .Where(x => x.Activator.LimitType != typeof(ILifetimeScope))
-                 .Where(x => x.Activator.LimitType != typeof(IComponentContext))
                  .SelectMany(x => x.Services)
+                 .Where(x => (x as TypedService).ServiceType != typeof(ILifetimeScope))
+                 .Where(x => (x as TypedService).ServiceType != typeof(IComponentContext))
                  .Select(x => new ServiceTuple
                  {
                      ServiceType = (x as TypedService).ServiceType,
-                     Service = container.Resolve((x as TypedService).ServiceType)
+                     Service = TryResolve(x)
                  })
                  .ToArray();
+        }
+
+        private object? TryResolve(Service x)
+        {
+            try
+            {
+                return container.Resolve((x as TypedService).ServiceType);
+            }
+            catch (DependencyResolutionException)
+            {
+                return null;
+            }
+        }
+
+        private ContainerBuilder CreateContainerBuilder(IContainer container)
+        {
+            var services = GetOwnServices(container);
+
+            var containerBuilder = new ContainerBuilder();
+
+            services.Where(x => x.Service == null)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterType(x.ServiceType));
+
+            services.Where(x => x.Service != null)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
+
+            return containerBuilder;
         }
 
         private class ServiceTuple
         {
             public Type ServiceType { get; set; }
-            public object Service { get; set; }
+            public object? Service { get; set; }
         }
     }
 }
