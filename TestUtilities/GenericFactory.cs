@@ -51,17 +51,9 @@ namespace MPTech.TestUtilities
             var containerBuilder = CreateContainerBuilder(container);
             RemoveService<TService>();
 
-            if (typeof(TService).IsInterface)
-            {
-                containerBuilder.RegisterInstance(service)
-                    .As<TService>();
-            }
-            else
-            {
-                containerBuilder.RegisterInstance(service)
-                    .As<TService>()
-                    .PropertiesAutowired();
-            }
+            containerBuilder.RegisterInstance(service)
+                .As<TService>()
+                .PropertiesAutowired();
 
             container = containerBuilder.Build();
         }
@@ -102,11 +94,12 @@ namespace MPTech.TestUtilities
         {
             return container.ComponentRegistry.Registrations
                  .SelectMany(x => x.Services)
-                 .Where(x => (x as TypedService).ServiceType != typeof(ILifetimeScope))
-                 .Where(x => (x as TypedService).ServiceType != typeof(IComponentContext))
+                 .Where(x => (x as TypedService) != null)
+                 .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
+                 .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
                  .Select(x => new ServiceTuple
                  {
-                     ServiceType = (x as TypedService).ServiceType,
+                     ServiceType = (x as TypedService)!.ServiceType,
                      Service = TryResolve(x)
                  })
                  .ToArray();
