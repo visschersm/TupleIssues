@@ -3,6 +3,7 @@ using System;
 using FluentAssertions;
 using Moq;
 using Autofac.Core;
+using System.Linq;
 
 namespace MPTech.TestUtilities.UnitTests
 {
@@ -189,7 +190,7 @@ namespace MPTech.TestUtilities.UnitTests
             // Arrange
             GenericFactory factory = new GenericFactory();
             Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
-            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService<ITestDependencyInterface>(dependency.Object);
 
             // Act
             factory.RemoveService<ITestDependencyInterface>();
@@ -200,68 +201,88 @@ namespace MPTech.TestUtilities.UnitTests
         }
 
         [TestMethod]
-        public void CreateAfterRemove_ShouldNotThrow()
+        public void RemoveService_ReRegister_ShouldBeFound()
         {
             // Arrange
-            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
             GenericFactory factory = new GenericFactory();
-
-            Func<TestServiceWithDependencies> func = () =>
-            {
-                factory.RemoveService<ITestDependencyInterface>();
-                factory.RegisterOrReplaceService(dependency.Object);
-                return factory.Create<TestServiceWithDependencies>();
-            };
-
-            // Act & Assert
-            func.Should().NotThrow();
-        }
-
-        [TestMethod]
-        public void CreateAfterRemove_MissingDependency_ShouldThrow()
-        {
-            // Arrange
             Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
-            Mock<IOtherDependencyInterface> otherDependency = new Mock<IOtherDependencyInterface>();
 
-            GenericFactory factory = new GenericFactory();
-            factory.RegisterOrReplaceService< ITestDependencyInterface>(dependency.Object);
-            var foo = factory.IsRegistered<ITestDependencyInterface>();
-            factory.RegisterOrReplaceService(otherDependency.Object);
+            // Act
+            factory.RegisterOrReplaceService(dependency.Object);
+            var result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
 
-            _ = factory.Create<TestServiceWithDependencies>();
-            _ = factory.Create<TestServiceWithOtherDependencies>();
+            factory.RemoveService<ITestDependencyInterface>();
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeFalse();
 
-            Func<TestServiceWithDependencies> func = () =>
-            {
-                factory.RemoveService<ITestDependencyInterface>();
-                return factory.Create<TestServiceWithDependencies>();
-            };
-
-            // Act & Assert
-            func.Should().Throw<DependencyResolutionException>();
-            _ = factory.Create<TestServiceWithOtherDependencies>();
+            factory.RegisterOrReplaceService(dependency.Object);
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
         }
+        //     [TestMethod]
+        //     public void CreateAfterRemove_ShouldNotThrow()
+        //     {
+        //         // Arrange
+        //         Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+        //         GenericFactory factory = new GenericFactory();
 
-        [TestMethod]
-        public void RemoveAfterCreate_ShouldNotThrow()
-        {
-            // Arrange
-            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
-            GenericFactory factory = new GenericFactory();
+        //         Func<TestServiceWithDependencies> func = () =>
+        //         {
+        //             factory.RemoveService<ITestDependencyInterface>();
+        //             factory.RegisterOrReplaceService(dependency.Object);
+        //             return factory.Create<TestServiceWithDependencies>();
+        //         };
 
-            Func<TestServiceWithDependencies> func = () =>
-            {
-                factory.RegisterOrReplaceService(dependency.Object);
-                var testService = factory.Create<TestServiceWithDependencies>();
-                factory.RemoveService<ITestDependencyInterface>();
+        //         // Act & Assert
+        //         func.Should().NotThrow();
+        //     }
 
-                return testService;
-            };
+        //     [TestMethod]
+        //     public void CreateAfterRemove_MissingDependency_ShouldThrow()
+        //     {
+        //         // Arrange
+        //         Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+        //         Mock<IOtherDependencyInterface> otherDependency = new Mock<IOtherDependencyInterface>();
 
-            // Act & Assert
-            func.Should().NotThrow();
-        }
+        //         GenericFactory factory = new GenericFactory();
+        //         factory.RegisterOrReplaceService< ITestDependencyInterface>(dependency.Object);
+        //         var foo = factory.IsRegistered<ITestDependencyInterface>();
+        //         factory.RegisterOrReplaceService(otherDependency.Object);
+
+        //         _ = factory.Create<TestServiceWithDependencies>();
+        //         _ = factory.Create<TestServiceWithOtherDependencies>();
+
+        //         Func<TestServiceWithDependencies> func = () =>
+        //         {
+        //             factory.RemoveService<ITestDependencyInterface>();
+        //             return factory.Create<TestServiceWithDependencies>();
+        //         };
+
+        //         // Act & Assert
+        //         func.Should().Throw<DependencyResolutionException>();
+        //         _ = factory.Create<TestServiceWithOtherDependencies>();
+        //     }
+
+        //     [TestMethod]
+        //     public void RemoveAfterCreate_ShouldNotThrow()
+        //     {
+        //         // Arrange
+        //         Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+        //         GenericFactory factory = new GenericFactory();
+
+        //         Func<TestServiceWithDependencies> func = () =>
+        //         {
+        //             factory.RegisterOrReplaceService(dependency.Object);
+        //             var testService = factory.Create<TestServiceWithDependencies>();
+        //             factory.RemoveService<ITestDependencyInterface>();
+
+        //             return testService;
+        //         };
+
+        //         // Act & Assert
+        //         func.Should().NotThrow();
+        //     }
     }
 
     public class TestServiceWithoutDependencies { }

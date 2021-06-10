@@ -11,7 +11,7 @@ namespace MPTech.TestUtilities
 {
     public class GenericFactory
     {
-        private ContainerBuilder containerBuilder = new ContainerBuilder();
+        public ContainerBuilder containerBuilder = new ContainerBuilder();
         private IContainer? container = null;
 
         public GenericFactory()
@@ -51,13 +51,16 @@ namespace MPTech.TestUtilities
         public virtual void RegisterOrReplaceService<TService>(TService service)
             where TService : class
         {
-            var foo = typeof(TService);
             _ = service ?? throw new ArgumentNullException(nameof(service));
 
-            if (IsRegistered<TService>())
-                RemoveService<TService>();
-
-            containerBuilder.RegisterInstance(service).As<TService>();
+            if (typeof(TService).IsInterface)
+            {
+                containerBuilder.RegisterInstance(service).As<TService>();
+            }
+            else
+            {
+                containerBuilder.RegisterInstance(service);
+            }
         }
 
         /// <summary>
@@ -76,23 +79,31 @@ namespace MPTech.TestUtilities
         {
             if (container == null)
                 container = containerBuilder.Build();
+            else
+                container = RebuildContainer(container);
 
-            var components = container.ComponentRegistry.Registrations
-                //.Where(x => x.Activator.LimitType != typeof(ILifetimeScope))
-                .SelectMany(x => x.Services)
-                .Where(x => (x as TypedService).ServiceType != typeof(TService))
+            var services = GetOwnServices(container)
+                .Where(x => x.ServiceType != typeof(TService))
                 .ToArray();
 
-            var services = components.Select(x => new
-            {
-                ServiceType = (x as TypedService).ServiceType,
-                Service = container.Resolve((x as TypedService).ServiceType)
-            });
-
             containerBuilder = new ContainerBuilder();
-            services.ToList().ForEach(x => containerBuilder.RegisterInstance(x.Service).As(x.ServiceType));
 
-            container = null;
+            services.Where(x => x.ServiceType.IsInterface)
+                .Where(x => x.ServiceType != typeof(ILifetimeScope))
+                .Where(x => x.ServiceType != typeof(IComponentContext))
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
+
+            services.Where(x => !x.ServiceType.IsInterface)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
+
+            foreach (var c in services)
+            {
+                Console.WriteLine(c);
+            }
+            container = containerBuilder.Build();
+
         }
 
         /// <summary>
@@ -103,26 +114,27 @@ namespace MPTech.TestUtilities
         public virtual bool IsRegistered<T>()
             where T : class
         {
-
-            container = RebuildContainer();
+            if (container != null)
+                container = RebuildContainer(container);
+            else
+                container = containerBuilder.Build();
 
             return container.IsRegistered<T>();
         }
 
         public IContainer RebuildContainer(IContainer container)
         {
-            var components = container.ComponentRegistry.Registrations
-                .SelectMany(x => x.Services)
-                .ToArray();
-
-            var services = components.Select(x => new
-            {
-                ServiceType = (x as TypedService).ServiceType,
-                Service = container.Resolve((x as TypedService).ServiceType)
-            });
+            var serivces = GetOwnServices(container);
 
             containerBuilder = new ContainerBuilder();
-            services.ToList().ForEach(x => containerBuilder.RegisterInstance(x.Service).As(x.ServiceType));
+
+            serivces.Where(x => x.ServiceType.IsInterface)
+               .ToList()
+               .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
+
+            serivces.Where(x => !x.ServiceType.IsInterface)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
 
             return containerBuilder.Build();
         }
@@ -130,23 +142,42 @@ namespace MPTech.TestUtilities
         public IContainer RebuildContainer<T>(IContainer container)
             where T : class
         {
-            var components = container.ComponentRegistry.Registrations
-                .SelectMany(x => x.Services)
-                .ToArray();
-
-            var services = components.Select(x => new 
-            { 
-                ServiceType = (x as TypedService).ServiceType, 
-                Service = container.Resolve((x as TypedService).ServiceType) 
-            });
+            var services = GetOwnServices(container);
 
             containerBuilder = new ContainerBuilder();
-            services.ToList().ForEach(x => containerBuilder.RegisterInstance(x.Service).As(x.ServiceType));
+
+            services.Where(x => x.ServiceType.IsInterface)
+               .ToList()
+               .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
+
+            services.Where(x => !x.ServiceType.IsInterface)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service));
 
             containerBuilder.RegisterType<T>()
                 .PropertiesAutowired();
 
             return containerBuilder.Build();
+        }
+
+        private ServiceTuple[] GetOwnServices(IContainer container)
+        {
+            return container.ComponentRegistry.Registrations
+                 .Where(x => x.Activator.LimitType != typeof(ILifetimeScope))
+                 .Where(x => x.Activator.LimitType != typeof(IComponentContext))
+                 .SelectMany(x => x.Services)
+                 .Select(x => new ServiceTuple
+                 {
+                     ServiceType = (x as TypedService).ServiceType,
+                     Service = container.Resolve((x as TypedService).ServiceType)
+                 })
+                 .ToArray();
+        }
+
+        private class ServiceTuple
+        {
+            public Type ServiceType { get; set; }
+            public object Service { get; set; }
         }
     }
 }
