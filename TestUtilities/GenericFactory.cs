@@ -119,7 +119,7 @@ namespace MPTech.TestUtilities
             return CreateContainerBuilder(services);
         }
 
-        private ContainerBuilder CreateContainerBuilder(ServiceTuple[] services)
+        private static ContainerBuilder CreateContainerBuilder(ServiceTuple[] services)
         {
             var containerBuilder = new ContainerBuilder();
 
