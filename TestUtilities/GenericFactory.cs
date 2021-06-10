@@ -90,14 +90,14 @@ namespace MPTech.TestUtilities
             return container.IsRegistered<T>();
         }
 
-        private ServiceTuple[] GetOwnServices(IContainer container)
+        private (Type ServiceType, object? Service)[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
                  .SelectMany(x => x.Services)
                  .Where(x => (x as TypedService) != null)
                  .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
                  .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
-                 .Select(x => new ServiceTuple((x as TypedService)!.ServiceType, TryResolve(x)))
+                 .Select(x => ((x as TypedService)!.ServiceType, TryResolve(x)))
                  .ToArray();
         }
 
@@ -119,7 +119,7 @@ namespace MPTech.TestUtilities
             return CreateContainerBuilder(services);
         }
 
-        private static ContainerBuilder CreateContainerBuilder(ServiceTuple[] services)
+        private static ContainerBuilder CreateContainerBuilder((Type ServiceType, object? Service)[] services)
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -132,18 +132,6 @@ namespace MPTech.TestUtilities
                 .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
 
             return containerBuilder;
-        }
-
-        private class ServiceTuple
-        {
-            public ServiceTuple(Type serviceType, object? service)
-            {
-                ServiceType = serviceType;
-                Service = service;
-            }
-
-            public Type ServiceType { get; set; }
-            public object? Service { get; set; }
         }
     }
 }
