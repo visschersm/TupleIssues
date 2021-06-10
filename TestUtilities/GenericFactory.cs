@@ -26,7 +26,6 @@ namespace MPTech.TestUtilities
         public virtual T Create<T>()
             where T : class
         {
-            var foo = typeof(T);
             containerBuilder.RegisterType<T>()
                 .PropertiesAutowired();
 
@@ -89,8 +88,6 @@ namespace MPTech.TestUtilities
             containerBuilder = new ContainerBuilder();
 
             services.Where(x => x.ServiceType.IsInterface)
-                .Where(x => x.ServiceType != typeof(ILifetimeScope))
-                .Where(x => x.ServiceType != typeof(IComponentContext))
                 .ToList()
                 .ForEach(x => containerBuilder.RegisterInstance(x).As(x.ServiceType));
 
