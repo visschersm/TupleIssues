@@ -3,6 +3,8 @@ using System;
 using FluentAssertions;
 using Moq;
 using Autofac.Core;
+using System.Linq;
+using Autofac;
 
 namespace MPTech.TestUtilities.UnitTests
 {
@@ -52,6 +54,33 @@ namespace MPTech.TestUtilities.UnitTests
                 .NotBeNull()
                 .And
                 .BeOfType<TestServiceWithDependencies>();
+        }
+
+        [TestMethod]
+        public void CreateTwice_WithoutDependencies_DoesNotThrow()
+        {
+            GenericFactory factory = new GenericFactory();
+
+            var result1 = factory.Create<TestServiceWithoutDependencies>();
+            var result2 = factory.Create<TestServiceWithoutDependencies>();
+
+            result1.Should().BeOfType<TestServiceWithoutDependencies>();
+            result2.Should().BeOfType<TestServiceWithoutDependencies>();
+        }
+
+        [TestMethod]
+        public void CreateTwice_WithDependencies_DoesNotThrow()
+        {
+            GenericFactory factory = new GenericFactory();
+
+            Mock<ITestDependencyInterface> mock = new Mock<ITestDependencyInterface>();
+            factory.RegisterOrReplaceService(mock.Object);
+
+            var result1 = factory.Create<TestServiceWithDependencies>();
+            var result2 = factory.Create<TestServiceWithDependencies>();
+
+            result1.Should().BeOfType<TestServiceWithDependencies>();
+            result2.Should().BeOfType<TestServiceWithDependencies>();
         }
 
         [TestMethod]
@@ -162,7 +191,7 @@ namespace MPTech.TestUtilities.UnitTests
             // Arrange
             GenericFactory factory = new GenericFactory();
             Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
-            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService<ITestDependencyInterface>(dependency.Object);
 
             // Act
             factory.RemoveService<ITestDependencyInterface>();
@@ -172,6 +201,29 @@ namespace MPTech.TestUtilities.UnitTests
             result.Should().BeFalse();
         }
 
+        [TestMethod]
+        public void RemoveService_ReRegister_ShouldBeFound()
+        {
+            // Arrange
+            GenericFactory factory = new GenericFactory();
+            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+
+            // Act
+            Console.WriteLine("Register1");
+            factory.RegisterOrReplaceService(dependency.Object);
+            var result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
+
+            Console.WriteLine("Remove");
+            factory.RemoveService<ITestDependencyInterface>();
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeFalse();
+
+            Console.WriteLine("Register2");
+            factory.RegisterOrReplaceService(dependency.Object);
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
+        }
         [TestMethod]
         public void CreateAfterRemove_ShouldNotThrow()
         {
@@ -188,6 +240,30 @@ namespace MPTech.TestUtilities.UnitTests
 
             // Act & Assert
             func.Should().NotThrow();
+        }
+
+        [TestMethod]
+        public void CreateAfterRemove_MissingDependency_ShouldThrow()
+        {
+            // Arrange
+            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+
+            GenericFactory factory = new GenericFactory();
+            factory.RegisterOrReplaceService(dependency.Object);
+
+            _ = factory.Create<TestServiceWithDependencies>();
+
+            Func<TestServiceWithDependencies> func = () =>
+            {
+                factory.RemoveService<ITestDependencyInterface>();
+                return factory.Create<TestServiceWithDependencies>();
+            };
+
+            // Act & Assert
+            func.Should().Throw<DependencyResolutionException>();
+
+            factory.RegisterOrReplaceService(dependency.Object);
+            _ = factory.Create<TestServiceWithDependencies>();
         }
 
         [TestMethod]
@@ -213,9 +289,15 @@ namespace MPTech.TestUtilities.UnitTests
 
     public class TestServiceWithoutDependencies { }
     public interface ITestDependencyInterface { }
+    public interface IOtherDependencyInterface { }
+
     public class TestServiceWithDependencies
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "This is a test dependency, nothing is actually using it, but it is verified by the DI")]
-        public TestServiceWithDependencies(ITestDependencyInterface testDependency) { }
+        public TestServiceWithDependencies(ITestDependencyInterface _) { }
+    }
+
+    public class TestServiceWithOtherDependencies
+    {
+        public TestServiceWithOtherDependencies(IOtherDependencyInterface _) { }
     }
 }
