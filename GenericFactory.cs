@@ -7,7 +7,7 @@ using Autofac.Core;
 using Autofac.Builder;
 using Autofac.Core.Lifetime;
 
-namespace MatrTech.Utility.Test
+namespace MatrTech.Utilities.Test
 {
     public class GenericFactory
     {
