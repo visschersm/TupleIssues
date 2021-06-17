@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MPTech.TestUtilities
+namespace MatrTech.Utility.Test
 {
     public abstract class TestBase
     {
