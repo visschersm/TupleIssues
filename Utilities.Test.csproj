@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <DefaultNamespace>MatrTech.Utilities.Test</DefaultNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="autofac" Version="6.2.0" />
+  </ItemGroup>
+
+</Project>
