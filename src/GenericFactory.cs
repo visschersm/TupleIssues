@@ -1,11 +1,7 @@
 using Autofac;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Autofac.Features.Decorators;
 using Autofac.Core;
-using Autofac.Builder;
-using Autofac.Core.Lifetime;
 
 namespace MatrTech.Utilities.Test
 {
