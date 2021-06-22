@@ -20,8 +20,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/**/*.csproj
       - name: Build
-        working-directory: src/**
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore src/**/*.csproj
       - name: Test
-        working-directory: tests/Utilities.Test.UnitTests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal tests/**/*.csproj
