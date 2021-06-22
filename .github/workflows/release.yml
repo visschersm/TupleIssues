@@ -1,5 +1,6 @@
 name: Release
-
+#https://github.com/marketplace/actions/publish-nuget
+# https://github.com/visschersm/workflow-package/blob/main/.github/workflows/release.yml
 on: #push
   release:
     types: [created]
