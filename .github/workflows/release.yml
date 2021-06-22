@@ -25,9 +25,9 @@ jobs:
       - name: restore dependencies
         run: dotnet restore src/**/*.csproj
       - name: Build
-        run: dotnet build --configuration Release /p:Version=${VERSION} src/**/*.csproj
+        run: dotnet build src/**/*.csproj --configuration Release /p:Version=${VERSION}
       - name: Test
-        run: dotnet test --configuration Release /p:Version=${VERSION} --no-build tests/**/*.csproj
+        run: dotnet test tests/**/*.csproj --configuration Release /p:Version=${VERSION} --no-build
       - name: Pack
         run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
       - name: Push
