@@ -14,7 +14,7 @@
     <MinorVersion>0</MinorVersion>
     <PatchVersion>1</PatchVersion>
     <BuildVersion>$([System.DateTime]::Now.ToString("yyMMdd"))$([System.DateTime]::Now.ToString("HHmm"))</BuildVersion>
-    <PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
+    <!--<PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>-->
 
   </PropertyGroup>
 
