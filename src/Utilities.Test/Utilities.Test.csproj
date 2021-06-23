@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>MatrTech.Utilities.Test</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <OutputPath>..\..\..\..\local-packages</OutputPath>
     <Nullable>enable</Nullable>
@@ -15,7 +16,7 @@
     <PatchVersion>1</PatchVersion>
     <BuildVersion>$([System.DateTime]::Now.ToString("yyMMdd"))$([System.DateTime]::Now.ToString("HHmm"))</BuildVersion>
     <Version>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</Version>
-    
+
     <PackageId>MatrTech.Utilities.Test</PackageId>
     <Authors>MatrTech</Authors>
     <Company>MatrTech</Company>
