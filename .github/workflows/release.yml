@@ -1,6 +1,5 @@
-name: Release
-#https://github.com/marketplace/actions/publish-nuget
-# https://github.com/visschersm/workflow-package/blob/main/.github/workflows/release.yml 
+name: .NET Release
+
 on: 
   push:
     tags:
@@ -13,10 +12,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    # - name: Verify commit exists in origin/main
-    #   run: |
-    #     git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-    #     git branch --remote --contains | grep origin/main
+    - name: Verify commit exists in origin/main
+      run: |
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+        git branch --remote --contains | grep origin/main
     - name: Set VERSION variable from tag
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
 
