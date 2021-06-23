@@ -14,8 +14,8 @@
     <MinorVersion>0</MinorVersion>
     <PatchVersion>1</PatchVersion>
     <BuildVersion>$([System.DateTime]::Now.ToString("yyMMdd"))$([System.DateTime]::Now.ToString("HHmm"))</BuildVersion>
-    <PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
-
+    <Version>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</Version>
+    
     <PackageId>MatrTech.Utilities.Test</PackageId>
     <Authors>MatrTech</Authors>
     <Company>MatrTech</Company>
