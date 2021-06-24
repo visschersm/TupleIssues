@@ -207,21 +207,19 @@ namespace MatrTech.Utilities.Test.UnitTests
             Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
 
             // Act
-            Console.WriteLine("Register1");
             factory.RegisterOrReplaceService(dependency.Object);
             var result = factory.IsRegistered<ITestDependencyInterface>();
             result.Should().BeTrue();
 
-            Console.WriteLine("Remove");
             factory.RemoveService<ITestDependencyInterface>();
             result = factory.IsRegistered<ITestDependencyInterface>();
             result.Should().BeFalse();
 
-            Console.WriteLine("Register2");
             factory.RegisterOrReplaceService(dependency.Object);
             result = factory.IsRegistered<ITestDependencyInterface>();
             result.Should().BeTrue();
         }
+
         [TestMethod]
         public void CreateAfterRemove_ShouldNotThrow()
         {
