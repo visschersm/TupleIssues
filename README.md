@@ -1,2 +1,2 @@
-# MatrTech.Utility
-Testing utilities to make C# (unit/integration) testing less tedious
+# MatrTech.Utilities
+Some utilities to make it easier to test in C#.
