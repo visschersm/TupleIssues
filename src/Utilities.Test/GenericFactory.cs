@@ -86,6 +86,7 @@ namespace MatrTech.Utilities.Test
             return container.IsRegistered<T>();
         }
 
+#if !NETSTANDARD2_0
         private (Type ServiceType, object? Service)[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
@@ -96,12 +97,32 @@ namespace MatrTech.Utilities.Test
                  .Select(x => ((x as TypedService)!.ServiceType, TryResolve(x)))
                  .ToArray();
         }
+#else
+        private (Type ServiceType, object Service)[] GetOwnServices(IContainer container)
+        {
+            return container.ComponentRegistry.Registrations
+                 .SelectMany(x => x.Services)
+                 .Where(x => (x as TypedService) != null)
+                 .Where(x => (x as TypedService).ServiceType != typeof(ILifetimeScope))
+                 .Where(x => (x as TypedService).ServiceType != typeof(IComponentContext))
+                 .Select(x => ((x as TypedService).ServiceType, TryResolve(x)))
+                 .ToArray();
+        }
+#endif
 
+#if !NETSTANDARD2_0
         private object? TryResolve(Service x)
+#else
+        private object TryResolve(Service x)
+#endif
         {
             try
             {
+#if !NETSTANDARD2_0
                 return container.Resolve((x as TypedService)!.ServiceType);
+#else
+                return container.Resolve((x as TypedService).ServiceType);
+#endif
             }
             catch (DependencyResolutionException)
             {
@@ -115,7 +136,12 @@ namespace MatrTech.Utilities.Test
             return CreateContainerBuilder(services);
         }
 
+#if !NETSTANDARD2_0
         private static ContainerBuilder CreateContainerBuilder((Type ServiceType, object? Service)[] services)
+#else
+        // TODO: Should Service not be lowercase here?
+        private static ContainerBuilder CreateContainerBuilder((Type ServiceType, object Service)[] services)
+#endif
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -123,10 +149,15 @@ namespace MatrTech.Utilities.Test
                 .ToList()
                 .ForEach(x => containerBuilder.RegisterType(x.ServiceType));
 
+#if !NETSTANDARD2_0
             services.Where(x => x.Service != null)
                 .ToList()
                 .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
-
+#else
+      services.Where(x => x.Service != null)
+                .ToList()
+                .ForEach(x => containerBuilder.RegisterInstance(x.Service).As(x.ServiceType));
+#endif
             return containerBuilder;
         }
     }
