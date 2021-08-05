@@ -1,8 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using FluentAssertions;
-using Moq;
 using Autofac.Core;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
 
 namespace MatrTech.Utilities.Test.UnitTests
 {
@@ -86,8 +86,6 @@ namespace MatrTech.Utilities.Test.UnitTests
         {
             // Arrange
             GenericFactory factory = new GenericFactory();
-
-
 
             // Act
 #if NET462 || NET48 || NETSTANDARD20 || NETSTANDARD21
@@ -289,16 +287,22 @@ namespace MatrTech.Utilities.Test.UnitTests
     }
 
     public class TestServiceWithoutDependencies { }
+
     public interface ITestDependencyInterface { }
+
     public interface IOtherDependencyInterface { }
 
     public class TestServiceWithDependencies
     {
-        public TestServiceWithDependencies(ITestDependencyInterface _) { }
+        public TestServiceWithDependencies(ITestDependencyInterface _)
+        {
+        }
     }
 
     public class TestServiceWithOtherDependencies
     {
-        public TestServiceWithOtherDependencies(IOtherDependencyInterface _) { }
+        public TestServiceWithOtherDependencies(IOtherDependencyInterface _)
+        {
+        }
     }
 }
