@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net462</TargetFrameworks>
-    <RootNamespace>MatrTech.Utilities.Test</RootNamespace>
+    <RootNamespace>Matr.Utilities.Test</RootNamespace>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -20,7 +20,7 @@
   <Target Name="SetVersion" BeforeTargets="Build">
     <PropertyGroup>
       <MajorVersion>0</MajorVersion>
-      <MinorVersion>0</MinorVersion>
+      <MinorVersion>1</MinorVersion>
       <PatchVersion>$([System.DateTime]::Now.ToString("yyMMdd"))</PatchVersion>
       <BuildVersion  Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("HHmmss"))</BuildVersion>
       <PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
