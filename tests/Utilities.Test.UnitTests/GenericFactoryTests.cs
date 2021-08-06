@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 
-namespace MatrTech.Utilities.Test.UnitTests
+namespace Matr.Utilities.Test.UnitTests
 {
     [TestClass]
     public class GenericFactoryTests

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using Autofac.Core;
 
-namespace MatrTech.Utilities.Test
+namespace Matr.Utilities.Test
 {
     public class GenericFactory
     {
