@@ -8,7 +8,7 @@ using System.Text.Json;
 #endif
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Matr.Utilities.Test.UnitTests
+namespace Matr.Utilities.Test.Attributes.UnitTests
 {
     [TestClass]
     public class JsonTestMethodAttributeTests
@@ -56,6 +56,13 @@ namespace Matr.Utilities.Test.UnitTests
         public void Test(WeatherForecast forecast)
         {
             forecast.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void JsonTestMethod_RandomStringAsFile_ShouldThrow()
+        {
+            Action act = () => new JsonTestMethodAttribute($"{Guid.NewGuid()}", typeof(WeatherForecast));
+            act.Should().Throw<FileNotFoundException>();
         }
     }
 }
