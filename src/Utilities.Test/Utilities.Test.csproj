@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net462</TargetFrameworks>
-    <RootNamespace>MatrTech.Utilities.Test</RootNamespace>
+    <RootNamespace>Matr.Utilities.Test</RootNamespace>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -22,7 +22,7 @@
       <MajorVersion>0</MajorVersion>
       <MinorVersion>0</MinorVersion>
       <PatchVersion>$([System.DateTime]::Now.ToString("yyMMdd"))</PatchVersion>
-      <BuildVersion  Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("HHmmss"))</BuildVersion>
+      <BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("HHmmss"))</BuildVersion>
       <PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
     </PropertyGroup>
   </Target>
@@ -34,6 +34,9 @@
   <ItemGroup>
     <PackageReference Include="autofac" Version="6.2.0" />
     <Compile Include="TestBase.cs" />
+    <Compile Include="JsonTestMethodAttribute.cs" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1'  ">

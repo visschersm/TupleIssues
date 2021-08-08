@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MatrTech.Utilities.Test
+﻿namespace Matr.Utilities.Test
 {
     public abstract class TestBase
     {
