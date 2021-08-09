@@ -1,14 +1,26 @@
 using System;
-using System.Text.Json;
-using System.Linq;
 using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Matr.Utilities.Test.Attributes
 {
-    public partial class JsonTestMethodAttribute
+    [AttributeUsage(System.AttributeTargets.Method)]
+    public partial class JsonTestMethodAttribute : TestMethodAttribute
     {
+        private readonly string filepath;
+        private readonly Type dataType;
+        public JsonTestMethodAttribute(string filepath, Type dataType)
+        {
+            _ = File.Exists(filepath) ? filepath : throw new FileNotFoundException(filepath);
+            _ = dataType ?? throw new ArgumentNullException(nameof(dataType));
+
+            this.filepath = filepath;
+            this.dataType = dataType;
+        }
+
         public override TestResult[] Execute(ITestMethod testMethod)
         {
             using (StreamReader r = new StreamReader(filepath))
@@ -16,7 +28,7 @@ namespace Matr.Utilities.Test.Attributes
                 string json = r.ReadToEnd();
 
                 var dataArray = JsonSerializer.Deserialize(json, dataType.MakeArrayType());
-#if NET48
+#if NET48 || NET471 || NET462 || NET461 || NETSTANDARD2_0
                 return (dataArray as IEnumerable).Cast<object>()
 #else
                 return (dataArray as IEnumerable)!.Cast<object>()
