@@ -88,7 +88,7 @@ namespace Matr.Utilities.Test.UnitTests
             GenericFactory factory = new GenericFactory();
 
             // Act
-#if NET462 || NET48 || NETSTANDARD20 || NETSTANDARD21
+#if NET461 || NET462 || NET471 || NET472 || NET48 || NETSTANDARD2_0 || NETSTANDARD2_1
             ITestDependencyInterface dependency = null;
             Action func = () => factory.RegisterOrReplaceService(dependency);
 #else

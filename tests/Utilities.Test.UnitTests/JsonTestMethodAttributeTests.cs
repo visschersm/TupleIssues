@@ -17,7 +17,7 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
         {
             public DateTime Date { get; set; }
             public int TemperatureCelsius { get; set; }
-#if NET462 || NET48 || NETSTANDARD20 || NETSTANDARD21
+#if NET461 || NET462 || NET471 || NET472 || NET48 || NETSTANDARD2_0 || NETSTANDARD2_1
             public string Summary { get; set; }
 #else
             public string? Summary { get; set; }
