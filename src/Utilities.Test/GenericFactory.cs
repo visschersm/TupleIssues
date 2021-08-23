@@ -1,7 +1,7 @@
 using Autofac;
+using Autofac.Core;
 using System;
 using System.Linq;
-using Autofac.Core;
 
 namespace MatrTech.Utilities.Test
 {
@@ -45,7 +45,6 @@ namespace MatrTech.Utilities.Test
             _ = service ?? throw new ArgumentNullException(nameof(service));
 
             var containerBuilder = CreateContainerBuilder(container);
-            RemoveService<TService>();
 
             containerBuilder.RegisterInstance(service)
                 .As<TService>()

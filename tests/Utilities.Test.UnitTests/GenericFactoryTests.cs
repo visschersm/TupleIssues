@@ -88,7 +88,7 @@ namespace MatrTech.Utilities.Test.UnitTests
             GenericFactory factory = new GenericFactory();
 
             // Act
-#if NET462 || NET48 || NETSTANDARD20 || NETSTANDARD21
+#if NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48 || NETSTANDARD20 || NETSTANDARD21
             ITestDependencyInterface dependency = null;
             Action func = () => factory.RegisterOrReplaceService(dependency);
 #else
@@ -221,6 +221,26 @@ namespace MatrTech.Utilities.Test.UnitTests
             factory.RegisterOrReplaceService(dependency.Object);
             result = factory.IsRegistered<ITestDependencyInterface>();
             result.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void RemoveService_DoubleRegistration_ShouldNotBeFound()
+        {
+            // Arrange
+            GenericFactory factory = new GenericFactory();
+            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+            Mock<ITestDependencyInterface> dependency2 = new Mock<ITestDependencyInterface>();
+
+            // Act
+            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService(dependency2.Object);
+
+            var result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
+
+            factory.RemoveService<ITestDependencyInterface>();
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeFalse();
         }
 
         [TestMethod]
