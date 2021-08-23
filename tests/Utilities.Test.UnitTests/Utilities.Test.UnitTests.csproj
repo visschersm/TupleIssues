@@ -13,7 +13,7 @@
 			net461;
 		</TargetFrameworks>
 		<IsPackable>false</IsPackable>
-		<RootNamespace>MatrTech.Utilities.Test.UnitTests</RootNamespace>
+		<RootNamespace>Matr.Utilities.Test.UnitTests</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">

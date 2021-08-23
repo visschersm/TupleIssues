@@ -12,7 +12,7 @@ namespace MatrTech.Utilities.Test.UnitTests {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.2.0")]
     internal sealed partial class test : global::System.Configuration.ApplicationSettingsBase {
         
         private static test defaultInstance = ((test)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new test())));
