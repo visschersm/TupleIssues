@@ -17,5 +17,7 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Test
-        run: dotnet vstest tests/**/bin/Release/**/*Tests.dll
+      # Append every DLL file that ends with 'Tests.dll' to the variable $x, then call 'dotnet test' with the DLLs to execute all the tests
+      - name: Run Tests
+        shell: powershell
+        run: $x = ""; Get-ChildItem -path . -Recurse -Include *Tests.dll | where { $_.FullName -match "bin" }  | foreach { $x += " ""$_""" }; iex "dotnet test --logger ""trx;LogFileName=Results.trx"" $x"
