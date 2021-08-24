@@ -12,6 +12,7 @@
 			net462;
 			net461;
 		</TargetFrameworks>
+		<IsTestProject>true</IsTestProject>
 		<IsPackable>false</IsPackable>
 		<RootNamespace>Matr.Utilities.Test.NUnitTests</RootNamespace>
 	</PropertyGroup>
