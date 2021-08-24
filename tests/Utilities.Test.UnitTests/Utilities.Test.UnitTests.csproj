@@ -1,7 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net462</TargetFrameworks>
+		<TargetFrameworks>
+			net6.0;
+			net5.0;
+			netcoreapp3.1;
+			net48;
+			net472;
+			net471;
+			net47;
+			net462;
+			net461;
+		</TargetFrameworks>
 		<IsPackable>false</IsPackable>
 		<RootNamespace>Matr.Utilities.Test.UnitTests</RootNamespace>
 	</PropertyGroup>
