@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net48;net462</TargetFrameworks>
+    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;netstandard2.0</TargetFrameworks>
     <RootNamespace>Matr.Utilities.Test</RootNamespace>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
@@ -21,8 +21,8 @@
     <PropertyGroup>
       <MajorVersion>0</MajorVersion>
       <MinorVersion>1</MinorVersion>
-      <PatchVersion>0</PatchVersion>
-      <BuildVersion  Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("HHmmss"))</BuildVersion>
+      <PatchVersion>1</PatchVersion>
+      <BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("MMddHHmmss"))</BuildVersion>
       <PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
     </PropertyGroup>
   </Target>
