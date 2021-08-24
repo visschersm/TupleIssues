@@ -16,6 +16,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/**/*.csproj
       - name: Build
-        run: dotnet build --no-restore src/**/*.csproj
+        run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --no-build --verbosity normal tests/**/*.csproj
+        run: dotnet test --no-build --verbosity normal
