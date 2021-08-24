@@ -14,8 +14,8 @@ jobs:
           dotnet-version: 6.0.x
           include-prerelease: true
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore src/**/*.csproj
       - name: Build
-        run: dotnet build --no-restore src/**/*.csproj
+        run: dotnet build --configuration Release --no-restore src/**/*.csproj
       - name: Test
-        run: dotnet test --no-build --verbosity normal tests/**/Utilities.Test.UnitTests.csproj
+        run: dotnet test --configuration Release --no-build --verbosity normal tests/**/Utilities.Test.UnitTests.csproj
