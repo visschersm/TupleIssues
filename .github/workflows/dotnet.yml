@@ -16,6 +16,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/**/*.csproj
       - name: Build
-        run: dotnet build --configuration Release --no-restore src/**/*.csproj
+        run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet vstest tests/**/bin/Release/**/*Tests.dll
+        run: dotnet test --configuration Release --no-build --verbosity normal tests/**/Utilities.Test.UnitTests.csproj
