@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -17,7 +17,5 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      # Append every DLL file that ends with 'Tests.dll' to the variable $x, then call 'dotnet test' with the DLLs to execute all the tests
-      - name: Run Tests
-        shell: powershell
-        run: $x = ""; Get-ChildItem -path . -Recurse -Include *Tests.dll | where { $_.FullName -match "bin" }  | foreach { $x += " ""$_""" }; iex "dotnet test --logger ""trx;LogFileName=Results.trx"" $x"
+      - name: Test
+        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
