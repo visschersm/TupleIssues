@@ -5,7 +5,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <OutputPath>..\..\..\..\local-packages</OutputPath>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
