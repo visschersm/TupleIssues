@@ -18,4 +18,4 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore src/**/*.csproj
       - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal tests/**/Utilities.Test.UnitTests.csproj
+        run: dotnet vstest tests/**/bin/Release/**/*Tests.dll
