@@ -20,7 +20,7 @@
 	<Target Name="SetVersion" BeforeTargets="Build">
 		<PropertyGroup>
 			<MajorVersion>0</MajorVersion>
-			<MinorVersion>0</MinorVersion>
+			<MinorVersion>1</MinorVersion>
 			<PatchVersion>1</PatchVersion>
 			<BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("MMddHHmmss"))</BuildVersion>
 			<PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
