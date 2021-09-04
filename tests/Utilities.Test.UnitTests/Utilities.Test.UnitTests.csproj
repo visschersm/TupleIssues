@@ -17,10 +17,14 @@
 		<RootNamespace>Matr.Utilities.Test.UnitTests</RootNamespace>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">
+	<PropertyGroup Condition=" 
+		'$(TargetFramework)' == 'net6.0' 
+		OR '$(TargetFramework)' == 'net5.0' 
+		OR '$(TargetFramework)' == 'netcoreapp3.1' 
+		">
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.2.0" />
 		<PackageReference Include="FluentAssertions" Version="6.1.0" />
@@ -32,10 +36,24 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Condition=" 
+			'$(TargetFramework)' == 'net48' 
+			OR '$(TargetFramework)' == 'net472' 
+			OR '$(TargetFramework)' == 'net471' 
+			OR '$(TargetFramework)' == 'net47' 
+			OR '$(TargetFramework)' == 'net462' 
+			OR '$(TargetFramework)' == 'net461' 
+			" 
+			Include="system.text.json" Version="5.0.2" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
+	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="data.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>
