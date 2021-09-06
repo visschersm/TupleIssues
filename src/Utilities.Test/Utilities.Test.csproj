@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+		<TargetFrameworks>
+			net6.0;
+			net5.0;
+			netcoreapp3.1;
+			netstandard2.1;
+			netstandard2.0;
+		</TargetFrameworks>
 		<RootNamespace>Matr.Utilities.Test</RootNamespace>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
@@ -11,7 +17,7 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningsAsErrors />
 
-		<PackageId>MatrTech.Utilities.Test</PackageId>
+		<PackageId>Matr.Utilities.Test</PackageId>
 		<Authors>MatrTech</Authors>
 		<Company>MatrTech</Company>
 		<Copyright>MatrTech 2021</Copyright>
@@ -21,20 +27,22 @@
 		<PropertyGroup>
 			<MajorVersion>0</MajorVersion>
 			<MinorVersion>1</MinorVersion>
-			<PatchVersion>1</PatchVersion>
-			<BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">$([System.DateTime]::Now.ToString("MMddHHmmss"))</BuildVersion>
+			<PatchVersion>3</PatchVersion>
+			<BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">
+					$([System.DateTime]::Now.ToString("MMddHHmmss"))
+			</BuildVersion>
 			<PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
 		</PropertyGroup>
 	</Target>
 
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1'  ">
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="autofac" Version="6.2.0" />
-		<PackageReference Include="MSTest.TestFramework" Version="2.2.5" />
-		<PackageReference Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net461' " Include="system.text.json" Version="5.0.2" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+		<PackageReference Condition=" '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net47' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net461' " Include="system.text.json" Version="5.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,7 +56,7 @@
 		<Compile Include="GenericFactory.cs" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' ">
-		<Compile Include="GenericFactory_462.cs" />
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net47' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' ">
+		<Compile Include="GenericFactory_fmw.cs" />
 	</ItemGroup>
 </Project>
