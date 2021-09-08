@@ -5,12 +5,12 @@
 			net6.0;
 			net5.0;
 			netcoreapp3.1;
-			net48;
+			<!-- net48;
 			net472;
 			net471;
 			net47;
 			net462;
-			net461;
+			net461; -->
 		</TargetFrameworks>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 		<IsPackable>false</IsPackable>
@@ -22,6 +22,7 @@
 
     
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
