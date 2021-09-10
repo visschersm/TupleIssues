@@ -5,9 +5,9 @@ using FluentAssertions;
 
 namespace Matr.Utilities.Test.NUnitTests
 {
-    public class Foo
+    public class JsonNTestMethodAttributeTests
     {
-        [FooJsonTest("data.json", typeof(WeatherForecast))]
+        [JsonNTestMethod("data.json", typeof(WeatherForecast))]
         public void Test(WeatherForecast forecast)
         {
             forecast.Should().NotBeNull();
