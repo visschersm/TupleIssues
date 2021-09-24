@@ -31,5 +31,26 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
             Action act = () => _ = new JsonTestMethodAttribute($"{Guid.NewGuid()}", typeof(WeatherForecast));
             act.Should().Throw<FileNotFoundException>();
         }
+
+        [TestMethod]
+        public void JsonTestMethod()
+        {
+#if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
+            Action act = () => _ = new JsonTestMethodAttribute(null, typeof(WeatherForecast));
+#else
+            Action act = () => _ = new JsonTestMethodAttribute(null!, typeof(WeatherForecast));
+#endif
+            act.Should().Throw<ArgumentNullException>();
+        }
+
+        // #if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
+        // [JsonTestMethod(null, typeof(WeatherForecast))]
+        // #else
+        //         [JsonTestMethod(null!, typeof(WeatherForecast))]
+        // #endif
+        //         public void Foo()
+        //         {
+
+        //         }
     }
 }

@@ -14,6 +14,9 @@ namespace Matr.Utilities.Test.Attributes
         private readonly Type dataType;
         public JsonTestMethodAttribute(string filepath, Type dataType)
         {
+            if (string.IsNullOrWhiteSpace(filepath))
+                throw new ArgumentNullException(nameof(filepath));
+
             _ = File.Exists(filepath) ? filepath : throw new FileNotFoundException(filepath);
             _ = dataType ?? throw new ArgumentNullException(nameof(dataType));
 

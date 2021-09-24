@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>
@@ -36,8 +36,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Utilities.Test.MSTest\Utilities.Test.MSTest.csproj" />
 		<ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
+    <ProjectReference Include="..\..\src\Utilities.Test.MSTest\Utilities.Test.MSTest.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

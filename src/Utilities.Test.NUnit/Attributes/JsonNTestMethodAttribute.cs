@@ -24,6 +24,8 @@ namespace Matr.Utilities.NTest.Attributes
 
         public JsonNTestMethodAttribute(string filepath, Type dataType)
         {
+            if (string.IsNullOrWhiteSpace(filepath)) throw new ArgumentNullException(nameof(filepath));
+
             this.filepath = filepath;
             this.dataType = dataType;
         }
@@ -43,6 +45,12 @@ namespace Matr.Utilities.NTest.Attributes
 
         private IEnumerable<ITestCaseData> GetTestCasesFor(IMethodInfo method)
         {
+            if (!File.Exists(filepath))
+                return new List<ITestCaseData>
+                {
+                    new TestCaseParameters(new FileNotFoundException(filepath))
+                };
+
             using (StreamReader r = new StreamReader(filepath))
             {
                 string json = r.ReadToEnd();

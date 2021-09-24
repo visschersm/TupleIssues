@@ -1,8 +1,51 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>
+			net6.0;
+			net5.0;
+			netcoreapp3.1;
+			<!-- netstandard2.1;
+			netstandard2.0; -->
+		</TargetFrameworks>
+		<RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<OutputPath>..\..\..\..\local-packages</OutputPath>
+
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+
+		<PackageId>Matr.Utilities.Test.MSTest</PackageId>
+		<Authors>MatrTech</Authors>
+		<Company>MatrTech</Company>
+		<Copyright>MatrTech 2021</Copyright>
+	</PropertyGroup>
+
+  <!--TODO: Inherit package version from Utilities.Test-->
+	<Target Name="SetVersion" BeforeTargets="Build">
+		<PropertyGroup>
+			<MajorVersion>0</MajorVersion>
+			<MinorVersion>0</MinorVersion>
+			<PatchVersion>1</PatchVersion>
+			<BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">
+					$([System.DateTime]::Now.ToString("MMddHHmmss"))
+			</BuildVersion>
+			<PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
+		</PropertyGroup>
+	</Target>
+
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="Attributes\JsonTestMethodAttribute.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+	</ItemGroup>
 
 </Project>

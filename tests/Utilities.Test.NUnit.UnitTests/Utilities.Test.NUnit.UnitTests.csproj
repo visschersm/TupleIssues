@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Utilities.Test.NUnit\Utilities.Test.NUnit.csproj" />
     <ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
   </ItemGroup>
 
