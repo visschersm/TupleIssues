@@ -48,8 +48,8 @@
 	<ItemGroup>
 		<Compile Include="TestBase.cs" />
 		<Compile Include="Attributes\JsonTestMethodAttribute.cs" />
-
 		<Compile Include="GenericFactory_base.cs" />
+		<Compile Include="GenericFactoryExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">

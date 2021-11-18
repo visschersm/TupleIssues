@@ -2,11 +2,17 @@ using Autofac;
 using System;
 using System.Linq;
 using Autofac.Core;
+using System.Collections.Generic;
 
 namespace Matr.Utilities.Test
 {
     public partial class GenericFactory
     {
+        public List<(Type, object)> GetRegisteredServices()
+        {
+            return GetOwnServices(container).ToList();
+        }
+
         private (Type ServiceType, object Service)[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
