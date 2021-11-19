@@ -8,6 +8,10 @@ namespace Matr.Utilities.Test
 {
     public partial class GenericFactory
     {
+        /// <summary>
+        /// Gets all currently registered services.
+        /// </summary>
+        /// <returns>List of tuples of service types and services.</returns>
         public List<(Type, object)> GetRegisteredServices()
         {
             return GetOwnServices(container).ToList();
