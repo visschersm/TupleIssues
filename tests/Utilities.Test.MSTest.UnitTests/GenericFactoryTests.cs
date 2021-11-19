@@ -284,6 +284,81 @@ namespace Matr.Utilities.Test.UnitTests
             // Act & Assert
             func.Should().NotThrow();
         }
+
+        [TestMethod]
+        public void GetRegisteredServices_NonRegistered_EmptyList()
+        {
+            // Arrange
+            var factory = new GenericFactory();
+
+            // Act
+            var result = factory.GetRegisteredServices();
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void GetRegisteredServices_OneRegistered_ListOfOne()
+        {
+            // Arrange
+            var factory = new GenericFactory();
+            factory.RegisterOrReplaceService(new TestServiceWithoutDependencies());
+
+            // Act
+            var result = factory.GetRegisteredServices();
+
+            // Assert
+            result.Should().HaveCount(1);
+        }
+
+        [TestMethod]
+        public void GetRegisteredServices_MultiRegistered_NotBeEmpty()
+        {
+            // Arrange
+            var factory = new GenericFactory();
+            factory.RegisterOrReplaceService(new TestServiceWithoutDependencies());
+            factory.RegisterOrReplaceService(new Mock<ITestDependencyInterface>());
+            factory.RegisterOrReplaceService(new Mock<IOtherDependencyInterface>());
+            
+            // Act
+            var result = factory.GetRegisteredServices();
+
+            // Assert
+            result.Should().NotBeEmpty()
+                .And.NotHaveCount(1);
+        }
+
+        [TestMethod]
+        public void FluentRegistration_OneRegistered_NotBeEmpty()
+        {
+            // Arrange
+            var factory = new GenericFactory();
+            factory.RegisterOrReplaceService(new TestServiceWithoutDependencies());
+            
+            // Act
+            var result = factory.GetRegisteredServices();
+
+            // Assert
+            result.Should().NotBeEmpty();
+        }
+
+        [TestMethod]
+        public void FluentRegistration_MultiRegistered_NotBeEmpty()
+        {
+            // Arrange
+            var factory = new GenericFactory();
+            factory.RegisterOrReplace(new TestServiceWithoutDependencies())
+                .RegisterOrReplace(new Mock<ITestDependencyInterface>())
+                .RegisterOrReplace(new Mock<IOtherDependencyInterface>());
+            
+            // Act
+            var result = factory.GetRegisteredServices();
+
+            // Assert
+            result.Should().NotBeEmpty()
+                .And.NotHaveCount(1);
+        }
     }
 
     public class TestServiceWithoutDependencies { }
