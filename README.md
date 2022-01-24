@@ -1,5 +1,3 @@
-# MatrTech.Utilities
-Some utilities to make it easier to test in C#.
 # MatrTech.Utilities.Test
 This package provides some utilities to make it easier to test in C#. For starters it provides a lightweight dependency factory to manage all the tests dependencies. Making it easily and safe to register and replace dependencies within each test. Which provides proper state to test against.
 
