@@ -1,7 +1,7 @@
 using Autofac;
-using Autofac.Core;
 using System;
 using System.Linq;
+using Autofac.Core;
 using System.Collections.Generic;
 
 namespace Matr.Utilities.Test
@@ -12,27 +12,28 @@ namespace Matr.Utilities.Test
         /// Gets all currently registered services.
         /// </summary>
         /// <returns>List of tuples of service types and services.</returns>
-        public List<(Type, object?)> GetRegisteredServices()
+        public List<(Type, object)> GetRegisteredServices()
         {
             return GetOwnServices(container).ToList();
         }
 
-        private (Type ServiceType, object? Service)[] GetOwnServices(IContainer container)
+        private (Type ServiceType, object Service)[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
                  .SelectMany(x => x.Services)
                  .Where(x => (x as TypedService) != null)
-                 .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
-                 .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
-                 .Select(x => ((x as TypedService)!.ServiceType, TryResolve(x)))
+                 .Where(x => (x as TypedService).ServiceType != typeof(ILifetimeScope))
+                 .Where(x => (x as TypedService).ServiceType != typeof(IComponentContext))
+                 .Select(x => ((x as TypedService).ServiceType, TryResolve(x)))
                  .ToArray();
         }
 
-        private object? TryResolve(Service x)
+        private object TryResolve(Service x)
         {
             try
             {
-                return container.Resolve((x as TypedService)!.ServiceType);
+
+                return container.Resolve((x as TypedService).ServiceType);
             }
             catch (DependencyResolutionException)
             {
@@ -40,7 +41,8 @@ namespace Matr.Utilities.Test
             }
         }
 
-        private static ContainerBuilder CreateContainerBuilder((Type ServiceType, object? Service)[] services)
+        // TODO: Should Service not be lowercase here?
+        private static ContainerBuilder CreateContainerBuilder((Type ServiceType, object Service)[] services)
         {
             var containerBuilder = new ContainerBuilder();
 
@@ -49,9 +51,8 @@ namespace Matr.Utilities.Test
                 .ForEach(x => containerBuilder.RegisterType(x.ServiceType));
 
             services.Where(x => x.Service != null)
-                .ToList()
-                .ForEach(x => containerBuilder.RegisterInstance(x.Service!).As(x.ServiceType));
-
+                      .ToList()
+                      .ForEach(x => containerBuilder.RegisterInstance(x.Service).As(x.ServiceType));
             return containerBuilder;
         }
     }
