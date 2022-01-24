@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{63F6E7A2-8F7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Test", "src\Utilities.Test\Utilities.Test.csproj", "{131218E0-4DE6-4D1F-B2F6-384FA2749876}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Test.UnitTests", "tests\Utilities.Test.UnitTests\Utilities.Test.UnitTests.csproj", "{08B189AB-DA59-422C-B02C-E2CFB3F001E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Test.MSTest.UnitTests", "tests\Utilities.Test.MSTest.UnitTests\Utilities.Test.MSTest.UnitTests.csproj", "{08B189AB-DA59-422C-B02C-E2CFB3F001E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Test.NUnit.UnitTests", "tests\Utilities.Test.NUnit.UnitTests\Utilities.Test.NUnit.UnitTests.csproj", "{56860F2C-53CC-4BF2-A891-C889944EB51A}"
 EndProject
