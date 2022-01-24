@@ -1,7 +1,7 @@
 using Autofac;
+using Autofac.Core;
 using System;
 using System.Linq;
-using Autofac.Core;
 using System.Collections.Generic;
 
 namespace Matr.Utilities.Test
