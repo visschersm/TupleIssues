@@ -224,6 +224,26 @@ namespace Matr.Utilities.Test.UnitTests
         }
 
         [TestMethod]
+        public void RemoveService_DoubleRegistration_ShouldNotBeFound()
+        {
+            // Arrange
+            GenericFactory factory = new GenericFactory();
+            Mock<ITestDependencyInterface> dependency = new Mock<ITestDependencyInterface>();
+            Mock<ITestDependencyInterface> dependency2 = new Mock<ITestDependencyInterface>();
+
+            // Act
+            factory.RegisterOrReplaceService(dependency.Object);
+            factory.RegisterOrReplaceService(dependency2.Object);
+
+            var result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeTrue();
+
+            factory.RemoveService<ITestDependencyInterface>();
+            result = factory.IsRegistered<ITestDependencyInterface>();
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
         public void CreateAfterRemove_ShouldNotThrow()
         {
             // Arrange
