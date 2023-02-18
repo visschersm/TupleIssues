@@ -7,9 +7,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+      
       - name: Restore dependencies
-        run: dotnet restore Test.sln
+        run: dotnet restore
+      
       - name: Build
-        run: dotnet build Test.sln --configuration Release --no-restore 
+        run: dotnet build --configuration Release --no-restore 
+      
       - name: Test
-        run: dotnet test Test.sln --configuration Release --no-restore --no-build --verbosity normal
+        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
