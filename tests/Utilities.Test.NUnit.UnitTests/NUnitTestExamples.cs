@@ -5,7 +5,7 @@ using Moq;
 using System;
 #endif
 
-namespace Matr.Utilities.Test.UnitTests
+namespace Matr.Utilities.Test.NUnitTests
 {
     public class NUnitTestExamples : TestBase
     {

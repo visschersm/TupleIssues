@@ -1,23 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<TargetFrameworks>
-			net6.0;
-			net5.0;
-			netcoreapp3.1;
-			net48;
-			net472;
-			net471;
-			net47;
 			net462;
-			net461;
+			net47;
+			net471;
+			net472;
+			net48;
+			net481;
+			net6.0; 
+			net7.0;
 		</TargetFrameworks>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 		<IsPackable>false</IsPackable>
 		<RootNamespace>Matr.Utilities.Test.UnitTests</RootNamespace>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netcoreapp3.1' ">
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netcoreapp3.1' OR '$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0' ">
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -32,10 +30,10 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Condition=" '$(TargetFramework)' == 'net48' OR '$(TargetFramework)' == 'net472' OR '$(TargetFramework)' == 'net471' OR '$(TargetFramework)' == 'net47' OR '$(TargetFramework)' == 'net462' OR '$(TargetFramework)' == 'net461' " Include="system.text.json" Version="5.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\Utilities.Test.MSTest\Utilities.Test.MSTest.csproj" />
 		<ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
 	</ItemGroup>
 
