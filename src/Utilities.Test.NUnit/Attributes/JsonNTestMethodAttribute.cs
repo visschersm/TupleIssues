@@ -35,7 +35,11 @@ namespace Matr.Utilities.NTest.Attributes
         /// </summary>
         /// <param name="method">The IMethod for which tests are to be constructed.</param>
         /// <param name="suite">The suite to which the tests will be added.</param>
+#if NETSTANDARD2_0
+        public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, NUnit.Framework.Internal.Test suite)
+#else
         public IEnumerable<TestMethod> BuildFrom(IMethodInfo method, NUnit.Framework.Internal.Test? suite)
+#endif
         {
             foreach (TestCaseParameters parms in GetTestCasesFor(method))
             {
@@ -56,7 +60,11 @@ namespace Matr.Utilities.NTest.Attributes
                 string json = r.ReadToEnd();
 
                 var dataArray = JsonSerializer.Deserialize(json, dataType.MakeArrayType());
+#if NETSTANDARD2_0
+                return (dataArray as IEnumerable).Cast<object>()
+#else
                 return (dataArray as IEnumerable)!.Cast<object>()
+#endif
                     .Select(x => new TestCaseParameters(new object[] { x }))
                     .ToList();
             }

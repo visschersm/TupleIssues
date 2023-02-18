@@ -88,12 +88,12 @@ namespace Matr.Utilities.Test.UnitTests
             GenericFactory factory = new GenericFactory();
 
             // Act
-#if NETFRAMEWORK || NETSTANDARD20 || NETSTANDARD21
-            ITestDependencyInterface dependency = null;
-            Action func = () => factory.RegisterOrReplaceService(dependency);
-#else
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ITestDependencyInterface? dependency = null;
             Action func = () => factory.RegisterOrReplaceService(dependency!);
+#else
+            ITestDependencyInterface dependency = null;
+            Action func = () => factory.RegisterOrReplaceService(dependency);
 #endif
             // Assert
             func.Should().Throw<ArgumentNullException>();

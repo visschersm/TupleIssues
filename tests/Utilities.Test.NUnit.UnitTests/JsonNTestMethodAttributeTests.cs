@@ -23,7 +23,11 @@ namespace Matr.Utilities.Test.NUnitTests
             var type = this.GetType();
             var methodInfo = type.GetMethod(nameof(this.JsonNTestMethod_ValidJsonFile_ShouldHaveTwoCases));
             var result = new JsonNTestMethodAttribute("data.json", typeof(WeatherForecast))
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
                 .BuildFrom(new NUnit.Framework.Internal.MethodWrapper(type, methodInfo!), null);
+#else
+                .BuildFrom(new NUnit.Framework.Internal.MethodWrapper(type, methodInfo), null);
+#endif
 
             result.Should().NotBeNull();
             result.Count().Should().Be(2);
@@ -32,7 +36,11 @@ namespace Matr.Utilities.Test.NUnitTests
         [Test]
         public void JsonNTestMethod_FilePathNull_ArgumentNullException()
         {
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             Func<JsonNTestMethodAttribute> func = () => new JsonNTestMethodAttribute(null!, typeof(WeatherForecast));
+#else
+            Func<JsonNTestMethodAttribute> func = () => new JsonNTestMethodAttribute(null, typeof(WeatherForecast));
+#endif
 
             func.Should().Throw<ArgumentNullException>();
         }
@@ -61,10 +69,10 @@ namespace Matr.Utilities.Test.NUnitTests
         {
             public DateTime Date { get; set; }
             public int TemperatureCelsius { get; set; }
-#if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
-            public string Summary { get; set; }
-#else
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             public string? Summary { get; set; }
+#else
+            public string Summary { get; set; }
 #endif
         }
     }

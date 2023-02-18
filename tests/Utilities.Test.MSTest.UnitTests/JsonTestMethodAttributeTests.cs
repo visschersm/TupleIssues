@@ -12,10 +12,10 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
         {
             public DateTime Date { get; set; }
             public int TemperatureCelsius { get; set; }
-#if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
-            public string Summary { get; set; }
-#else
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             public string? Summary { get; set; }
+#else
+            public string Summary { get; set; }
 #endif
         }
 
@@ -35,10 +35,10 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
         [TestMethod]
         public void JsonTestMethod()
         {
-#if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
-            Action act = () => _ = new JsonTestMethodAttribute(null, typeof(WeatherForecast));
-#else
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             Action act = () => _ = new JsonTestMethodAttribute(null!, typeof(WeatherForecast));
+#else
+            Action act = () => _ = new JsonTestMethodAttribute(null, typeof(WeatherForecast));
 #endif
             act.Should().Throw<ArgumentNullException>();
         }
