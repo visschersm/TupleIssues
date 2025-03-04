@@ -1,7 +1,6 @@
 using Matr.Utilities.NTest.Attributes;
 using NUnit.Framework;
 using System;
-using FluentAssertions;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +13,7 @@ namespace Matr.Utilities.Test.NUnitTests
         [JsonNTestMethod("data.json", typeof(WeatherForecast))]
         public void JsonNTestMethod_ValidJsonFile_ShouldNotBeNull(WeatherForecast forecast)
         {
-            forecast.Should().NotBeNull();
+            Assert.NotNull(forecast);
         }
 
         [Test]
@@ -29,8 +28,8 @@ namespace Matr.Utilities.Test.NUnitTests
                 .BuildFrom(new NUnit.Framework.Internal.MethodWrapper(type, methodInfo), null);
 #endif
 
-            result.Should().NotBeNull();
-            result.Count().Should().Be(2);
+            Assert.NotNull(result);
+            Assert.That(result.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -41,8 +40,7 @@ namespace Matr.Utilities.Test.NUnitTests
 #else
             Func<JsonNTestMethodAttribute> func = () => new JsonNTestMethodAttribute(null, typeof(WeatherForecast));
 #endif
-
-            func.Should().Throw<ArgumentNullException>();
+            Assert.That(func, Throws.Exception.TypeOf<ArgumentNullException>());
         }
 
         // [Test]
