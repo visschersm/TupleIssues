@@ -1,5 +1,4 @@
 using Autofac.Core;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using NSubstitute;
@@ -19,7 +18,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.Create<TestServiceWithoutDependencies>();
 
             // Assert
-            result.Should().BeOfType<TestServiceWithoutDependencies>();
+            Assert.IsInstanceOfType<TestServiceWithoutDependencies>(result);
         }
 
         [TestMethod]
@@ -28,11 +27,8 @@ namespace Matr.Utilities.Test.UnitTests
             // Arrange
             GenericFactory factory = new GenericFactory();
 
-            // Act
-            Func<TestServiceWithDependencies> func = () => factory.Create<TestServiceWithDependencies>();
-
-            // Assert
-            func.Should().Throw<DependencyResolutionException>();
+            // Act & Assert
+            Assert.Throws<DependencyResolutionException>(() => factory.Create<TestServiceWithDependencies>());
         }
 
         [TestMethod]
@@ -48,10 +44,8 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.Create<TestServiceWithDependencies>();
 
             // Assert
-            result.Should()
-                .NotBeNull()
-                .And
-                .BeOfType<TestServiceWithDependencies>();
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType<TestServiceWithDependencies>(result);
         }
 
         [TestMethod]
@@ -62,8 +56,8 @@ namespace Matr.Utilities.Test.UnitTests
             var result1 = factory.Create<TestServiceWithoutDependencies>();
             var result2 = factory.Create<TestServiceWithoutDependencies>();
 
-            result1.Should().BeOfType<TestServiceWithoutDependencies>();
-            result2.Should().BeOfType<TestServiceWithoutDependencies>();
+            Assert.IsInstanceOfType<TestServiceWithoutDependencies>(result1);
+            Assert.IsInstanceOfType<TestServiceWithoutDependencies>(result2);
         }
 
         [TestMethod]
@@ -77,8 +71,8 @@ namespace Matr.Utilities.Test.UnitTests
             var result1 = factory.Create<TestServiceWithDependencies>();
             var result2 = factory.Create<TestServiceWithDependencies>();
 
-            result1.Should().BeOfType<TestServiceWithDependencies>();
-            result2.Should().BeOfType<TestServiceWithDependencies>();
+            Assert.IsInstanceOfType<TestServiceWithDependencies>(result1);
+            Assert.IsInstanceOfType<TestServiceWithDependencies>(result2);
         }
 
         [TestMethod]
@@ -96,7 +90,7 @@ namespace Matr.Utilities.Test.UnitTests
             Action func = () => factory.RegisterOrReplaceService(dependency);
 #endif
             // Assert
-            func.Should().Throw<ArgumentNullException>();
+            Assert.Throws<ArgumentNullException>(func);
         }
 
         [TestMethod]
@@ -106,11 +100,15 @@ namespace Matr.Utilities.Test.UnitTests
             var factory = new GenericFactory();
             var dependency = Substitute.For<ITestDependencyInterface>();
 
-            // Act
-            Action func = () => factory.RegisterOrReplaceService(dependency);
-
-            // Assert
-            func.Should().NotThrow();
+            // Act & Assert
+            try
+            {
+                factory.RegisterOrReplaceService(dependency);
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
 
         [TestMethod]
@@ -127,7 +125,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -141,7 +139,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -154,7 +152,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -169,7 +167,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeTrue();
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
@@ -183,7 +181,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -199,7 +197,7 @@ namespace Matr.Utilities.Test.UnitTests
             bool result = factory.IsRegistered<ITestDependencyInterface>();
 
             // Assert
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -212,15 +210,15 @@ namespace Matr.Utilities.Test.UnitTests
             // Act
             factory.RegisterOrReplaceService(dependency);
             var result = factory.IsRegistered<ITestDependencyInterface>();
-            result.Should().BeTrue();
+            Assert.IsTrue(result);
 
             factory.RemoveService<ITestDependencyInterface>();
             result = factory.IsRegistered<ITestDependencyInterface>();
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
 
             factory.RegisterOrReplaceService(dependency);
             result = factory.IsRegistered<ITestDependencyInterface>();
-            result.Should().BeTrue();
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
@@ -236,11 +234,11 @@ namespace Matr.Utilities.Test.UnitTests
             factory.RegisterOrReplaceService(dependency2);
 
             var result = factory.IsRegistered<ITestDependencyInterface>();
-            result.Should().BeTrue();
+            Assert.IsTrue(result);
 
             factory.RemoveService<ITestDependencyInterface>();
             result = factory.IsRegistered<ITestDependencyInterface>();
-            result.Should().BeFalse();
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
@@ -258,7 +256,14 @@ namespace Matr.Utilities.Test.UnitTests
             };
 
             // Act & Assert
-            func.Should().NotThrow();
+            try
+            {
+                func();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
 
         [TestMethod]
@@ -272,14 +277,12 @@ namespace Matr.Utilities.Test.UnitTests
 
             _ = factory.Create<TestServiceWithDependencies>();
 
-            Func<TestServiceWithDependencies> func = () =>
+            // Act & Assert
+            Assert.Throws<DependencyResolutionException>(() =>
             {
                 factory.RemoveService<ITestDependencyInterface>();
-                return factory.Create<TestServiceWithDependencies>();
-            };
-
-            // Act & Assert
-            func.Should().Throw<DependencyResolutionException>();
+                factory.Create<TestServiceWithDependencies>();
+            });
 
             factory.RegisterOrReplaceService(dependency);
             _ = factory.Create<TestServiceWithDependencies>();
@@ -302,7 +305,14 @@ namespace Matr.Utilities.Test.UnitTests
             };
 
             // Act & Assert
-            func.Should().NotThrow();
+            try
+            {
+                func();
+            }
+            catch (Exception exception)
+            {
+                Assert.Fail(exception.Message);
+            }
         }
 
         [TestMethod]
@@ -315,7 +325,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.GetRegisteredServices();
 
             // Assert
-            result.Should().BeEmpty();
+            Assert.IsEmpty(result);
         }
 
         [TestMethod]
@@ -329,7 +339,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.GetRegisteredServices();
 
             // Assert
-            result.Should().HaveCount(1);
+            Assert.HasCount(1, result);
         }
 
         [TestMethod]
@@ -345,8 +355,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.GetRegisteredServices();
 
             // Assert
-            result.Should().NotBeEmpty()
-                .And.NotHaveCount(1);
+            Assert.IsNotEmpty(result);
         }
 
         [TestMethod]
@@ -360,7 +369,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.GetRegisteredServices();
 
             // Assert
-            result.Should().NotBeEmpty();
+            Assert.IsNotEmpty(result);
         }
 
         [TestMethod]
@@ -376,8 +385,7 @@ namespace Matr.Utilities.Test.UnitTests
             var result = factory.GetRegisteredServices();
 
             // Assert
-            result.Should().NotBeEmpty()
-                .And.NotHaveCount(1);
+            Assert.IsNotEmpty(result);
         }
     }
 

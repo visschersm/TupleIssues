@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -22,14 +21,14 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
         [JsonTestMethod("data.json", typeof(WeatherForecast))]
         public void Test(WeatherForecast forecast)
         {
-            forecast.Should().NotBeNull();
+            Assert.IsNotNull(forecast);
         }
 
         [TestMethod]
         public void JsonTestMethod_RandomStringAsFile_ShouldThrow()
         {
             Action act = () => _ = new JsonTestMethodAttribute($"{Guid.NewGuid()}", typeof(WeatherForecast));
-            act.Should().Throw<FileNotFoundException>();
+            Assert.Throws<FileNotFoundException>(act);
         }
 
         [TestMethod]
@@ -40,7 +39,7 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
 #else
             Action act = () => _ = new JsonTestMethodAttribute(null, typeof(WeatherForecast));
 #endif
-            act.Should().Throw<ArgumentNullException>();
+            Assert.Throws<ArgumentNullException>(act);
         }
 
         // #if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
