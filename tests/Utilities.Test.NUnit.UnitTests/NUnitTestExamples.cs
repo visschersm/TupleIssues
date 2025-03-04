@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Moq;
+using NSubstitute;
 
 #if NET5_0 || NETCOREAPP3_1 || NETFRAMEWORK
 using System;
@@ -15,11 +15,11 @@ namespace Matr.Utilities.Test.NUnitTests
         {
             var returnValue = 1;
 
-            var mockedDependency = new Mock<ITestDependency>();
-            mockedDependency.Setup(x => x.Add(It.IsAny<int>(), It.IsAny<int>()))
+            var mockedDependency = Substitute.For<ITestDependency>();
+            mockedDependency.Add(Arg.Any<int>(), Arg.Any<int>())
                 .Returns(returnValue);
 
-            factory.RegisterOrReplaceService(mockedDependency.Object);
+            factory.RegisterOrReplaceService(mockedDependency);
             var testClass = factory.Create<TestClass>();
 
             var result = testClass.DoAddition(1, 1);
