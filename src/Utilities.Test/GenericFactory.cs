@@ -20,12 +20,12 @@ namespace Matr.Utilities.Test
         private (Type ServiceType, object? Service)[] GetOwnServices(IContainer container)
         {
             return container.ComponentRegistry.Registrations
-                 .SelectMany(x => x.Services)
-                 .Where(x => (x as TypedService) != null)
-                 .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
-                 .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
-                 .Select(x => ((x as TypedService)!.ServiceType, TryResolve(x)))
-                 .ToArray();
+                .SelectMany(x => x.Services)
+                .Where(x => (x as TypedService) != null)
+                .Where(x => (x as TypedService)!.ServiceType != typeof(ILifetimeScope))
+                .Where(x => (x as TypedService)!.ServiceType != typeof(IComponentContext))
+                .Select(x => ((x as TypedService)!.ServiceType, TryResolve(x)))
+                .ToArray();
         }
 
         private object? TryResolve(Service x)

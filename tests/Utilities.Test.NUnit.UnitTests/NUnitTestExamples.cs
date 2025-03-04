@@ -24,7 +24,7 @@ namespace Matr.Utilities.Test.NUnitTests
 
             var result = testClass.DoAddition(1, 1);
 
-            Assert.AreEqual(returnValue, result);
+            Assert.That(returnValue, Is.EqualTo(result));
         }
 
         public class TestClass
