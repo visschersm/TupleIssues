@@ -44,7 +44,7 @@
 	<ItemGroup>
 		<Compile Include="TestBase.cs" />
 		<Compile Include="GenericFactory_base.cs" />
-		<Compile Include="GenericFactoryExtensions.cs" />
+		<Compile Include="Extensions\GenericFactoryExtensions.cs" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
