@@ -3,6 +3,7 @@
 		<TargetFrameworks>
 			netstandard2.0;
 			netstandard2.1;
+			net7.0;
 		</TargetFrameworks>
 		<RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -33,7 +34,7 @@
 		</PropertyGroup>
 	</Target>
 
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0' OR '$(TargetFramework)' == 'netstandard2.1' ">
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

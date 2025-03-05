@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using Matr.Utilities.Test.MSTest.Attributes;
 
 namespace Matr.Utilities.Test.Attributes.UnitTests
 {
@@ -24,6 +25,14 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
             Assert.IsNotNull(forecast);
         }
 
+#if NET7_0_OR_GREATER
+        [JsonTestMethod<WeatherForecast>("data.json")]
+        public void GenericTest_ValidJsonFile_ReturnsObject(WeatherForecast forecast)
+        {
+            Assert.IsNotNull(forecast);
+        }
+#endif
+
         [TestMethod]
         public void JsonTestMethod_RandomStringAsFile_ShouldThrow()
         {
@@ -32,7 +41,7 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
         }
 
         [TestMethod]
-        public void JsonTestMethod()
+        public void JsonTestMethodAttribute_FileNull_ArgumentNullException()
         {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             Action act = () => _ = new JsonTestMethodAttribute(null!, typeof(WeatherForecast));
@@ -41,15 +50,5 @@ namespace Matr.Utilities.Test.Attributes.UnitTests
 #endif
             Assert.Throws<ArgumentNullException>(act);
         }
-
-        // #if NETFRAMEWORK || NETSTANDARD2_0 || NETSTANDARD2_1
-        // [JsonTestMethod(null, typeof(WeatherForecast))]
-        // #else
-        //         [JsonTestMethod(null!, typeof(WeatherForecast))]
-        // #endif
-        //         public void Foo()
-        //         {
-
-        //         }
     }
 }
