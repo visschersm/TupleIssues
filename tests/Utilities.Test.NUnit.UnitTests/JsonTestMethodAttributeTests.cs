@@ -1,27 +1,35 @@
-using Matr.Utilities.NTest.Attributes;
 using NUnit.Framework;
 using System;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Matr.Utilities.Test.Attributes;
 
 namespace Matr.Utilities.Test.NUnitTests
 {
-    public class JsonNTestMethodAttributeTests
+    public class JsonTestMethodAttributeTests
     {
-        [JsonNTestMethod("data.json", typeof(WeatherForecast))]
-        public void JsonNTestMethod_ValidJsonFile_ShouldNotBeNull(WeatherForecast forecast)
+#if NET7_0_OR_GREATER
+        [JsonTestMethod<WeatherForecast>("data.json")]
+        public void JsonTestMethod_ValidJsonFile_ShouldNotBeNull(WeatherForecast forecast)
+        {
+            Assert.NotNull(forecast);
+        }
+#endif
+
+        [JsonTestMethod("data.json", typeof(WeatherForecast))]
+        public void GenericJsonTestMethod_ValidJsonFile_ShouldNotBeNull(WeatherForecast forecast)
         {
             Assert.NotNull(forecast);
         }
 
         [Test]
-        public void JsonNTestMethod_ValidJsonFile_ShouldHaveTwoCases()
+        public void JsonTestMethod_ValidJsonFile_ShouldHaveTwoCases()
         {
             var type = this.GetType();
-            var methodInfo = type.GetMethod(nameof(this.JsonNTestMethod_ValidJsonFile_ShouldHaveTwoCases));
-            var result = new JsonNTestMethodAttribute("data.json", typeof(WeatherForecast))
+            var methodInfo = type.GetMethod(nameof(this.JsonTestMethod_ValidJsonFile_ShouldHaveTwoCases));
+            var result = new JsonTestMethodAttribute("data.json", typeof(WeatherForecast))
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
                 .BuildFrom(new NUnit.Framework.Internal.MethodWrapper(type, methodInfo!), null);
 #else
@@ -33,22 +41,22 @@ namespace Matr.Utilities.Test.NUnitTests
         }
 
         [Test]
-        public void JsonNTestMethod_FilePathNull_ArgumentNullException()
+        public void JsonTestMethod_FilePathNull_ArgumentNullException()
         {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-            Func<JsonNTestMethodAttribute> func = () => new JsonNTestMethodAttribute(null!, typeof(WeatherForecast));
+            Func<JsonTestMethodAttribute> func = () => new JsonTestMethodAttribute(null!, typeof(WeatherForecast));
 #else
-            Func<JsonNTestMethodAttribute> func = () => new JsonNTestMethodAttribute(null, typeof(WeatherForecast));
+            Func<JsonTestMethodAttribute> func = () => new JsonTestMethodAttribute(null, typeof(WeatherForecast));
 #endif
             Assert.That(func, Throws.Exception.TypeOf<ArgumentNullException>());
         }
 
         // [Test]
-        // public void JsonNTestMethod_NonsesForJsonFile_InvalidExtensionException()
+        // public void JsonTestMethod_NonsesForJsonFile_InvalidExtensionException()
         // {
         //     var type = this.GetType();
-        //     var methodInfo = type.GetMethod(nameof(this.JsonNTestMethod_NonsesForJsonFile_InvalidExtensionException));
-        //     var result = new JsonNTestMethodAttribute("some random text", typeof(WeatherForecast))
+        //     var methodInfo = type.GetMethod(nameof(this.JsonTestMethod_NonsesForJsonFile_InvalidExtensionException));
+        //     var result = new JsonTestMethodAttribute("some random text", typeof(WeatherForecast))
         //         .BuildFrom(new NUnit.Framework.Internal.MethodWrapper(type, methodInfo!), null);
 
         //     result.Should().NotBeNull();
