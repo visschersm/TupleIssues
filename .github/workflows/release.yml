@@ -31,10 +31,13 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore /p:Version=${VERSION}
+
       - name: Test
         run: dotnet test --configuration Release --no-restore --no-build /p:Version=${VERSION} --no-build
+
       - name: Pack
-        run: dotnet pack src/**/*.csproj --configuration Release /p:Version=${VERSION} --no-restore --no-build --output .
+        run: dotnet pack --configuration Release /p:Version=${VERSION} --no-restore --no-build --output .
+
       - name: Push
         run: dotnet nuget push *.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${NUGET_TOKEN}
         env:
