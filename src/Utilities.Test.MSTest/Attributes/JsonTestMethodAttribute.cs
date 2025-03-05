@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 #endif
 
-namespace Matr.Utilities.Test.MSTest.Attributes
+namespace Matr.Utilities.Test.Attributes
 {
 #if NET7_0_OR_GREATER
     [AttributeUsage(System.AttributeTargets.Method)]
@@ -47,7 +47,7 @@ namespace Matr.Utilities.Test.MSTest.Attributes
     {
         private readonly string _filepath;
         private readonly Type _dataType;
-        
+
         public JsonTestMethodAttribute(string filepath, Type dataType)
         {
             if (string.IsNullOrWhiteSpace(filepath))

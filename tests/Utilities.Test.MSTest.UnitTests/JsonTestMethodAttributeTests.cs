@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
-using Matr.Utilities.Test.MSTest.Attributes;
+using Matr.Utilities.Test.Attributes;
 
 namespace Matr.Utilities.Test.Attributes.UnitTests
 {
