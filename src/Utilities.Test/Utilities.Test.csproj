@@ -54,4 +54,7 @@
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
 		<Compile Include="GenericFactory_fmw.cs" />
 	</ItemGroup>
+
+	<PackageReference Include="System.ValueTuple" Version="4.5.0" Condition=" '$(TargetFramework)' == 'net47' " />
+
 </Project>
