@@ -16,6 +16,10 @@ namespace Matr.Utilities.Test
         {
             return GetOwnServices(container).Select(x => new Tuple<Type, object>(x.Item1, x.Item2)).ToList();
         }
+        // public List<(Type, object)> GetRegisteredServices()
+        // {
+        //     return GetOwnServices(container).ToList();
+        // }
 
         private (Type ServiceType, object Service)[] GetOwnServices(IContainer container)
         {
