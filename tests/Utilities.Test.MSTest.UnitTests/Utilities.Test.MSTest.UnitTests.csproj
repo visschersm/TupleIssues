@@ -15,10 +15,4 @@
 		<ProjectReference Include="..\..\src\Utilities.Test.MSTest\Utilities.Test.MSTest.csproj" />
 		<ProjectReference Include="..\..\src\Utilities.Test\Utilities.Test.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="data.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
 </Project>
