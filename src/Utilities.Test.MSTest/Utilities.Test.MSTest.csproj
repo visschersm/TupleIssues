@@ -3,15 +3,13 @@
 		<TargetFrameworks>
 			netstandard2.0;
 		</TargetFrameworks>
-		<!-- <RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace> -->
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
-	  <PackageReference Include="System.Text.Json" Version="6.0.11"/>
+	  <!-- <PackageReference Include="System.Text.Json" Version="6.0.11"/> -->
 	</ItemGroup>
 
 </Project>
