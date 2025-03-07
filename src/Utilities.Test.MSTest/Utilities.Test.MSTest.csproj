@@ -7,8 +7,6 @@
 
 	<ItemGroup>
 	  <PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
-		<!-- Is this package the thing that is breaking my stuff? -->
-	  <!-- <PackageReference Include="System.Text.Json" Version="6.0.11"/> -->
 	</ItemGroup>
 
 </Project>
