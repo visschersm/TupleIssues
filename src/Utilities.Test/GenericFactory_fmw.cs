@@ -12,9 +12,11 @@ namespace Matr.Utilities.Test
         /// Gets all currently registered services.
         /// </summary>
         /// <returns>List of tuples of service types and services.</returns>
-        public List<(Type, object)> GetRegisteredServices()
+        public List<Tuple<Type, object>> GetRegisteredServices()
         {
-            return GetOwnServices(container).ToList();
+            return GetOwnServices(container)
+                .Select(x => new Tuple<Type, object>(x.Item1, x.Item2))
+                .ToList();
         }
 
         private (Type ServiceType, object Service)[] GetOwnServices(IContainer container)
