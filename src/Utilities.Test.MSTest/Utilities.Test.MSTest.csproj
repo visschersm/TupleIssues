@@ -4,7 +4,7 @@
 			netstandard2.0;
 		</TargetFrameworks>
 		<RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace>
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<!-- <EnableDefaultCompileItems>false</EnableDefaultCompileItems> -->
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
