@@ -3,19 +3,6 @@
 		<TargetFrameworks>
 			netstandard2.0;
 		</TargetFrameworks>
-		<!-- <EnableDefaultCompileItems>false</EnableDefaultCompileItems> -->
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningsAsErrors />
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="autofac" Version="6.2.0" />
-	</ItemGroup>
-
-	<!-- <ItemGroup>
-		<Compile Include="TestBase.cs" />
-		<Compile Include="GenericFactory_fmw.cs" />
-	</ItemGroup> -->
 
 </Project>
