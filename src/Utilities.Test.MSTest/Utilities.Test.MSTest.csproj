@@ -8,8 +8,6 @@
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningsAsErrors />
 	</PropertyGroup>
 
 	<ItemGroup>
