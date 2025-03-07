@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Matr.Utilities.Test
 {
     public static class GenericFactoryExtensions

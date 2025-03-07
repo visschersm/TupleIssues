@@ -2,45 +2,19 @@
 	<PropertyGroup>
 		<TargetFrameworks>
 			netstandard2.0;
-			netstandard2.1;
-			net7.0;
 		</TargetFrameworks>
 		<RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<OutputPath>..\..\..\..\local-packages</OutputPath>
 
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningsAsErrors />
-
-		<PackageId>Matr.Utilities.Test.MSTest</PackageId>
-		<Authors>MatrTech</Authors>
-		<Company>MatrTech</Company>
-		<Copyright>MatrTech 2021</Copyright>
-	</PropertyGroup>
-
-  <!--TODO: Inherit package version from Utilities.Test-->
-	<Target Name="SetVersion" BeforeTargets="Build">
-		<PropertyGroup>
-			<MajorVersion>0</MajorVersion>
-			<MinorVersion>2</MinorVersion>
-			<PatchVersion>0</PatchVersion>
-			<BuildVersion Condition="'$(DesignTimeBuild)' != 'true' OR '$(BuildingProject)' == 'true'">
-					$([System.DateTime]::Now.ToString("MMddHHmmss"))
-			</BuildVersion>
-			<PackageVersion>$(MajorVersion).$(MinorVersion).$(PatchVersion).$(BuildVersion)</PackageVersion>
-		</PropertyGroup>
-	</Target>
-
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0' OR '$(TargetFramework)' == 'netstandard2.1' ">
-		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
-	  <PackageReference Include="System.Text.Json" Version="6.0.11" Condition=" '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' "/>
+	  <PackageReference Include="System.Text.Json" Version="6.0.11"/>
 	</ItemGroup>
 
 </Project>
