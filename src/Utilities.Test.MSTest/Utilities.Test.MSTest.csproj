@@ -3,8 +3,7 @@
 		<TargetFrameworks>
 			netstandard2.0;
 		</TargetFrameworks>
-		<RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace>
-		<!-- <EnableDefaultCompileItems>false</EnableDefaultCompileItems> -->
+		<!-- <RootNamespace>Matr.Utilities.Test.MSTest</RootNamespace> -->
 
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
