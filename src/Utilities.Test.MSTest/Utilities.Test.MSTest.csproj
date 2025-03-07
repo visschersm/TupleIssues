@@ -39,10 +39,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Attributes\JsonTestMethodAttribute.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="MSTest.TestFramework" Version="3.8.2" />
 	  <PackageReference Include="System.Text.Json" Version="6.0.11" Condition=" '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' "/>
 	</ItemGroup>
