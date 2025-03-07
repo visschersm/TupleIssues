@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
 
 namespace Matr.Utilities.Test.UnitTests
 {
@@ -11,35 +10,12 @@ namespace Matr.Utilities.Test.UnitTests
         {
             // Arrange
             var factory = new GenericFactory();
-            factory.RegisterOrReplace(new TestServiceWithoutDependencies())
-                .RegisterOrReplace(Substitute.For<ITestDependencyInterface>())
-                .RegisterOrReplace(Substitute.For<IOtherDependencyInterface>());
 
             // Act
             var result = factory.GetRegisteredServices();
 
             // Assert
             Assert.IsNotEmpty(result);
-        }
-    }
-
-    public class TestServiceWithoutDependencies { }
-
-    public interface ITestDependencyInterface { }
-
-    public interface IOtherDependencyInterface { }
-
-    public class TestServiceWithDependencies
-    {
-        public TestServiceWithDependencies(ITestDependencyInterface _)
-        {
-        }
-    }
-
-    public class TestServiceWithOtherDependencies
-    {
-        public TestServiceWithOtherDependencies(IOtherDependencyInterface _)
-        {
         }
     }
 }

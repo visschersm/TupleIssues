@@ -15,8 +15,6 @@
 
 	<ItemGroup>
 		<Compile Include="TestBase.cs" />
-		<Compile Include="GenericFactory_base.cs" />
-		<Compile Include="Extensions\GenericFactoryExtensions.cs" />
 		<Compile Include="GenericFactory_fmw.cs" />
 	</ItemGroup>
 
