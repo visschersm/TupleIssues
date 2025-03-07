@@ -18,11 +18,5 @@ jobs:
             9.0.x
             10.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
       - name: Test
-        run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
+        run: dotnet test
